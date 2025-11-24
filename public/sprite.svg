@@ -1,0 +1,20 @@
+<svg aria-hidden="true" style="position:absolute; width:0; height:0; overflow:hidden;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-taskflow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFB347"/>
+      <stop offset="60%" stop-color="#FF7A6B"/>
+      <stop offset="100%" stop-color="#FF4DA6"/>
+    </linearGradient>
+
+    <symbol id="taskflow-logo" viewBox="0 0 1024 1024">
+      <rect x="64" y="64" width="896" height="896" rx="200" fill="url(#grad-taskflow)"/>
+      <path
+        d="M 280 520 L 460 700 L 730 380"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="110"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>

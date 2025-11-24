@@ -9,6 +9,8 @@ import { refreshUserThunk } from "./redux/auth/operations";
 import Loader from "./components/common/Loader/Loader";
 import PublicRoute from "./components/Routes/PublicRoute";
 import PrivateRoute from "./components/Routes/PrivateRoute";
+import PageLayout from "./components/Layout/PageLayout/PageLayout";
+import DashBoardLayout from "./components/Layout/DashBoardLayout/DashBoardLayout";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const RegistrationPage = lazy(() =>
@@ -40,14 +42,17 @@ function App() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PublicRoute>
-              <HomePage />
-            </PublicRoute>
-          }
-        />
+        <Route element={<PageLayout />}>
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <HomePage />
+              </PublicRoute>
+            }
+          />
+        </Route>
+
         <Route
           path="/register"
           element={
@@ -66,11 +71,13 @@ function App() {
         />
         <Route path="/" element={<PrivateRoute />}>
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="dashboard" element={<DashBoardPage />} />
-          <Route path="projects" element={<ProjectsPage />} />
-          <Route path="projects/:id" element={<ProjectsDetailsPage />} />
-          <Route path="tasks/:id" element={<TasksDetailsPage />} />
-          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route element={<DashBoardLayout />}>
+            <Route path="dashboard" element={<DashBoardPage />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="projects/:id" element={<ProjectsDetailsPage />} />
+            <Route path="tasks/:id" element={<TasksDetailsPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
