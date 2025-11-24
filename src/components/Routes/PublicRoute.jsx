@@ -6,6 +6,10 @@ const PublicRoute = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const location = useLocation();
 
-  return isLoggedIn ? <Navigate to={location?.state || "/"} /> : children;
+  return isLoggedIn ? (
+    <Navigate to={location?.state || "/"} replace />
+  ) : (
+    children
+  );
 };
 export default PublicRoute;

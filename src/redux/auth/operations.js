@@ -34,5 +34,5 @@ export const refreshUserThunk = createAsyncThunk(
 );
 
 export const logoutThunk = createAsyncThunk("auth/logout", async () => {
-  return; // нет полезной нагрузки
+  return;
 });
