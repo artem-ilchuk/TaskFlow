@@ -1,11 +1,18 @@
 import { Outlet } from "react-router-dom";
 import Header from "../Header/Header";
-import { useSelector } from "react-redux";
+import { useTheme } from "../../../context/themeContext";
 
 const PageLayout = () => {
-  const theme = useSelector((state) => state.ui.theme);
+  const { theme } = useTheme();
   return (
-    <div className="container mx-auto px-4" data-theme={theme}>
+    <div
+      className="container bg-bg text-text px-4 min-h-screen transition-colors duration-500"
+      data-theme={theme}
+      style={{
+        backgroundColor: "var(--bg-color)",
+        color: "var(--text-color)",
+      }}
+    >
       <Header />
       <main className="min-h-[70vh] py-8">
         <Outlet />

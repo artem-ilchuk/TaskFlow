@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: nord --default, dark;
+}
 
 html {
   scroll-behavior: smooth;
@@ -7,6 +10,8 @@ body {
   font-family: var(--font-family);
   line-height: 1.5;
   transition: background-color 0.4s, color 0.4s;
+  margin: 0;
+  padding: 0;
 }
 
 h1,
