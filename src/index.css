@@ -3,11 +3,32 @@
   themes: nord --default, dark;
 }
 
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
 html {
   scroll-behavior: smooth;
 }
 body {
-  font-family: var(--font-family);
+  font-family: "Poppins", sans-serif;
   line-height: 1.5;
   transition: background-color 0.4s, color 0.4s;
   margin: 0;

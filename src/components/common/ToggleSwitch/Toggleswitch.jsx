@@ -1,7 +1,6 @@
 const Toggleswitch = ({ theme, toggleTheme }) => {
   return (
     <label className="flex cursor-pointer gap-2 items-center">
-      {/* Sun */}
       <svg
         width="20"
         height="20"
@@ -20,7 +19,6 @@ const Toggleswitch = ({ theme, toggleTheme }) => {
         onChange={toggleTheme}
       />
 
-      {/* Moon */}
       <svg
         width="20"
         height="20"
