@@ -1,13 +1,18 @@
-// import { useDispatch } from "react-redux";
-// import { loginThunk } from "../../redux/auth/operations";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { FaEye } from "react-icons/fa";
-// import { FaEyeSlash } from "react-icons/fa";
+import { PasswordHide } from "../../../hooks/usePasswordVisibility";
+import { registerSchema } from "../../../schemas/authSchemas";
+import PasswordToggle from "../../Common/PasswordToggle/PasswordToggle";
+import { AiFillCloseCircle } from "react-icons/ai";
+
+const createInitialState = () => ({ email: "", password: "", accept: false });
 
 const RegisterForm = () => {
-  const [form, setForm] = useState({ email: "", password: "", accept: false });
+  const [form, setForm] = useState(createInitialState());
   const [errors, setErrors] = useState({});
+  const { passwordVisibility, handlePasswordVisibility } = PasswordHide();
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,6 +25,8 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const result = registerSchema.safeParse(form);
+
     if (!result.success) {
       const formErrors = {};
       result.error.issues.forEach((issue) => {
@@ -30,67 +37,90 @@ const RegisterForm = () => {
     }
 
     setErrors({});
+
+    setForm(createInitialState());
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-        <legend className="fieldset-legend">Login</legend>
+    <form onSubmit={handleSubmit} noValidate>
+      <fieldset className="relative fieldset bg-base-200 border-base-300 rounded-box  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg border p-4 sm:px-6 md:px-8 lg:px-10">
+        <legend className="fieldset-legend text-base">Registration</legend>
+
+        <AiFillCloseCircle
+          onClick={() => navigate("/")}
+          className="absolute top-0.5 right-2 w-5 h-5 md:w-6 md:h-6 cursor-pointer
+             transition-transform duration-200 ease-in-out
+             hover:scale-110 hover:text-red-700"
+        />
 
         <label className="label">Email</label>
-        <input
-          name="email"
-          type="email"
-          className="input"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-        />
+        <div className="relative">
+          <input
+            name="email"
+            type="email"
+            className="input input-accent w-full"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+          />
+        </div>
         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
         <label className="label">Password</label>
-        <input
-          name="password"
-          type="password"
-          className="input"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-        />
+        <div className="relative">
+          <input
+            name="password"
+            type={passwordVisibility ? "text" : "password"}
+            className="input  input-accent w-full"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+          />
+          <PasswordToggle
+            visible={passwordVisibility}
+            onClick={handlePasswordVisibility}
+          />
+        </div>
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password}</p>
         )}
 
-        <label className="">
+        <label className="flex items-center gap-5 pt-4 pb-4">
           <input
             name="accept"
             type="checkbox"
-            className="checkbox checkbox-accent"
+            className="checkbox checkbox-accent rounded-md w-5 h-5 cursor-pointer"
             checked={form.accept}
             onChange={handleChange}
           />
-          <span className="">
+          <div className=" items-center text-s leading-snug">
             I accept the terms and conditions of the
-            <a href="#" className="">
+            <a href="#" className="text-blue-400 underline pl-1">
               Privacy Policy.
             </a>
-          </span>
+          </div>
         </label>
         {errors.accept && (
           <p className="text-red-500 text-sm">{errors.accept}</p>
         )}
         <button
           type="submit"
-          className="btn btn-accent mt-4"
+          className="btn btn-accent mt-4 cursor-pointer
+             transform transition-all duration-200 ease-in-out
+             hover:scale-105 hover:shadow-lg"
           disabled={!form.accept}
         >
           Register
         </button>
 
-        <p className="">
+        <p className="text-s text-center pt-2">
           Already have account?
-          <Link className="" to="/login">
+          <NavLink
+            to="/login"
+            className="pl-1 text-accent underline cursor-pointer"
+          >
             Let`s login!
-          </Link>
+          </NavLink>
         </p>
       </fieldset>
     </form>
