@@ -24,6 +24,35 @@
   font-style: normal;
 }
 
+@layer utilities {
+  .bg-hero-mobile {
+    background-image: url("/assets/img/hero/heroMob1x.webp");
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .bg-hero-mobile {
+      background-image: url("/assets/img/hero/heroMob2x.webp");
+    }
+  }
+
+  .bg-hero-tablet {
+    background-image: url("/assets/img/hero/heroTab1x.webp");
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .bg-hero-tablet {
+      background-image: url("/assets/img/hero/heroTab2x.webp");
+    }
+  }
+
+  .bg-hero-desktop {
+    background-image: url("/assets/img/hero/heroDesc1x.webp");
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .bg-hero-desktop {
+      background-image: url("/assets/img/hero/heroDesc2x.webp");
+    }
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

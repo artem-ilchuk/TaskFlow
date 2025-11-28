@@ -42,15 +42,16 @@ function App() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PublicRoute>
-              <HomePage />
-            </PublicRoute>
-          }
-        />
-
+        <Route element={<PageLayout />}>
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <HomePage />
+              </PublicRoute>
+            }
+          />
+        </Route>
         <Route
           path="/register"
           element={

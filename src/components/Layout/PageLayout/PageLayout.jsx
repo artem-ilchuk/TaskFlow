@@ -5,12 +5,15 @@ import { useTheme } from "../../../context/themeContext";
 const PageLayout = () => {
   const { theme } = useTheme();
   return (
-    <>
+    <div
+      className="container mx-auto bg-bg text-text px-5 min-h-screen transition-colors duration-500"
+      data-theme={theme}
+    >
       <Header />
-      <main className="min-h-[70vh] py-8">
+      <main className="min-h-[70vh] ">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 };
 

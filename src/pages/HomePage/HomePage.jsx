@@ -1,9 +1,9 @@
-import PageLayout from "../../components/Layout/PageLayout/PageLayout";
+import HeroSection from "../../components/Sections/HeroSection/HeroSection";
 
 const HomePage = () => {
   return (
     <>
-      <PageLayout />
+      <HeroSection />
     </>
   );
 };
