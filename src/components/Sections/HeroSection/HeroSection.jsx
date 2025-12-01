@@ -1,30 +1,44 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import heroImg from "../../../assets/img/hero/hero.webp";
 
 const HeroSection = () => {
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimate(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <section className="relative w-screen -ml-[50vw] left-[50%]">
-      <div
-        className="absolute inset-0 bg-no-repeat bg-center bg-cover "
-        style={{ backgroundImage: `url(${heroImg})` }}
-      ></div>
-      <div className="relative container mx-auto px-5 py-10 flex flex-col items-center">
-        <h1
-          className=" text-5xl font-bold text-white text-center max-w-80 wrap-break-words pb-4"
-          style={{
-            WebkitTextStroke: "0.2px black",
-          }}
-        >
-          From To-Do to Done!
-        </h1>
+    <section className=" hero-section  w-screen bg-no-repeat bg-center bg-cover">
+      <div className="container mx-auto px-5 py-10">
+        <div className="flex flex-col items-center">
+          <h1
+            className="text-5xl font-bold text-white text-center mx-auto max-w-xl wrap-break-word pb-4"
+            style={{
+              WebkitTextStroke: "0.2px black",
+            }}
+          >
+            <span>From To-Do</span>
+            <br />
+            <span
+              className={`inline-block transition duration-700 ease-out opacity-0 ${
+                animate ? "opacity-100 translate-x-0" : "-translate-x-10"
+              }`}
+            >
+              to Done!
+            </span>
+          </h1>
+        </div>
         <div className="w-full h-0.5 bg-white "></div>
-        <div className="relative w-screen -ml-[82vw] left-[50%] flex flex-col items-start px-5 pt-12 pb-40">
-          <p className="text-left text-xl tracking-wider font-bold max-w-[220px] pt-12 pb-16 ">
+        <div className="pt-12 pb-40">
+          <p className="text-left text-xl  text-black tracking-wider  font-bold max-w-[220px] pt-20 pb-16  md:text-3xl md:max-w-[420px] lg:text-4xl lg:max-w-[500px]  ">
             Track, plan, and complete tasks effortlessly. Task Flow helps you
             turn your ideas into action.
           </p>
           <NavLink
-            to="/contact"
+            to="/register"
             className="flex items-center gap-5 w-40 h-10 font-normal text-[14px] rounded-xl px-5 text-white bg-blue-600 shadow-[5px_10px_30px_rgba(76,64,247,0.5)]"
           >
             Get started

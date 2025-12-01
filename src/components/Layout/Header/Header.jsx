@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex flex-row justify-between">
+    <header className="container mx-auto px-5 flex flex-row justify-between">
       <div className="flex flex-row items-center gap-4 md:gap-8">
         <NavLink
           to="/"
