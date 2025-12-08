@@ -6,25 +6,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectIsRefreshing } from "./redux/auth/selectors";
 import { refreshUserThunk } from "./redux/auth/operations";
 
-import Loader from "./components/common/Loader/Loader";
+import Loader from "./components/Common/Loader/Loader";
 import PublicRoute from "./components/Routes/PublicRoute";
 import PrivateRoute from "./components/Routes/PrivateRoute";
 import PageLayout from "./components/Layout/PageLayout/PageLayout";
 import DashBoardLayout from "./components/Layout/DashBoardLayout/DashBoardLayout";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const RegistrationPage = lazy(() =>
-  import("./pages/RegistrationPage/RegistrationPage")
+const RegistrationPage = lazy(
+  () => import("./pages/RegistrationPage/RegistrationPage")
 );
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
 const DashBoardPage = lazy(() => import("./pages/DashBoardPage/DashBoardPage"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage/ProjectsPage"));
-const ProjectsDetailsPage = lazy(() =>
-  import("./pages/ProjectsDetailsPage/ProjectsDetailsPage")
+const ProjectsDetailsPage = lazy(
+  () => import("./pages/ProjectsDetailsPage/ProjectsDetailsPage")
 );
-const TasksDetailsPage = lazy(() =>
-  import("./pages/TasksDetailsPage/TasksDetailsPage")
+const TasksDetailsPage = lazy(
+  () => import("./pages/TasksDetailsPage/TasksDetailsPage")
 );
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage/AnalyticsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));

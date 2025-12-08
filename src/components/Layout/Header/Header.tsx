@@ -2,7 +2,7 @@ import { useTheme } from "../../../context/themeContext";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../../redux/auth/selectors";
 import { useNavigate, NavLink } from "react-router-dom";
-import Toggleswitch from "../../common/ToggleSwitch/Toggleswitch";
+import Toggleswitch from "../../Common/ToggleSwitch/Toggleswitch";
 import Avatar from "../../Avatar/Avatar";
 
 const Header = () => {

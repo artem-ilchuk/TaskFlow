@@ -4,12 +4,12 @@ import {
   refreshUserThunk,
   registerThunk,
   logoutThunk,
+  editUserName,
 } from "./operations";
 
 const initialState = {
   user: { name: null, email: null },
   token: null,
-  refreshToken: null,
   isLoggedIn: false,
   isRefreshing: false,
   isAuthLoading: false,
@@ -45,9 +45,8 @@ const authSlice = createSlice({
         return { ...initialState, theme };
       })
       .addCase(refreshUserThunk.fulfilled, (state, { payload }) => {
-        const { accessToken, refreshToken, user } = payload;
+        const { accessToken, user } = payload;
         if (accessToken) state.token = accessToken;
-        if (refreshToken) state.refreshToken = refreshToken;
         if (user) state.user = user;
         state.isLoggedIn = Boolean(state.token);
         state.isRefreshing = false;

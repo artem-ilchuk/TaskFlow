@@ -8,9 +8,23 @@ import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "react-hot-toast";
 import { persistor, store } from "./redux/store.js";
-import { ThemeProvider } from "./context/themeContext.jsx";
+import { ThemeProvider } from "./context/themeContext.js";
 
-createRoot(document.getElementById("root")).render(
+// if (import.meta.env.DEV) {
+//   import("./mocks/browser.js").then(({ worker }) => {
+//     worker
+//       .start({
+//         onUnhandledRequest: "bypass",
+//       })
+//       .then(() => {
+//         renderApp();
+//       });
+//   });
+// } else {
+//   renderApp();
+// }
+
+createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
