@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Header from "../Header/Header";
+import Header from "../../Sections/Header/Header";
 import { useTheme } from "../../../context/themeContext";
 
 const PageLayout = () => {
