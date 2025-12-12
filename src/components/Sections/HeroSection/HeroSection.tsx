@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import heroImg from "../../../assets/img/hero/hero.webp";
+import PadLayout from "../../Layout/PadLayout";
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);
@@ -12,7 +12,7 @@ const HeroSection = () => {
 
   return (
     <section className=" hero-section  w-screen bg-no-repeat bg-center bg-cover">
-      <div className="container mx-auto px-5 py-10">
+      <PadLayout padding={["m", "s", "m", "s"]} className=" mx-auto ">
         <div className="flex flex-col items-center">
           <h1
             className="text-5xl font-bold text-white text-center mx-auto max-w-xl wrap-break-word pb-4"
@@ -47,7 +47,7 @@ const HeroSection = () => {
             </svg>
           </NavLink>
         </div>
-      </div>
+      </PadLayout>
     </section>
   );
 };

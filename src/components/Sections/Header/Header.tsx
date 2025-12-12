@@ -18,12 +18,12 @@ const Header = () => {
 
   return (
     <header className=" mx-auto ">
-      <PadLayout padding={"m"}>
+      <PadLayout padding={"s"}>
         <InlineLayout justify="between">
-          <InlineLayout gap={"l"}>
+          <InlineLayout gap={"m"}>
             <NavLink
               to="/"
-              className=" py-4 cursor-pointer"
+              className="  cursor-pointer"
               aria-label="Go to home page"
             >
               <svg className="w-11 h-11 md:w-12 md:h-12 lg:w-16 lg:h-16">

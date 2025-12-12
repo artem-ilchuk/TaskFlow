@@ -19,6 +19,24 @@ export const CenterLayout: React.FC<CenterProps> = (props: CenterProps) => {
     ...otherProps
   } = props;
 
-  const style = maxWidth ? { maxWidth } : undefined;
+  const style = maxWidth
+    ? { maxWidth, marginLeft: "auto", marginRight: "auto" }
+    : undefined;
+
+  return (
+    <div
+      {...otherProps}
+      style={style}
+      className={clsx(
+        maxWidth && "w-full",
+        centerText && "text-center",
+        centerContent && "flex justify-center items-center",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 };
+
 export default CenterLayout;

@@ -3,9 +3,11 @@ import { createContext, useContext } from "react";
 import clsx from "clsx";
 import { SpaceKeys, designTokens } from "./sizes";
 
+type Breakpoints = "sm" | "md" | "lg" | "xl";
+
 type ColumnsProps = React.HTMLAttributes<HTMLDivElement> & {
   columns?: number;
-  gap?: SpaceKeys;
+  gap?: SpaceKeys | Partial<Record<Breakpoints, SpaceKeys>>;
   className?: string;
   children: React.ReactNode;
 };
@@ -27,7 +29,15 @@ export const Columns: React.FC<ColumnsProps> = (props: ColumnsProps) => {
     ...otherProps
   } = props;
 
-  const gapClass = `gap-${designTokens.spaceSchiema[gap]}`;
+  let gapClass = "";
+
+  if (typeof gap === "string") {
+    gapClass = designTokens.gapClasses[gap];
+  } else {
+    gapClass = Object.entries(gap)
+      .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
+      .join(" ");
+  }
 
   const columnsClasses = `grid-cols-[repeat(${columns},_1fr)]`;
 
