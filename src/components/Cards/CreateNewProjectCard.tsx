@@ -3,10 +3,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 
 const CreateNewProjectCard = ({ onClick }: { onClick?: () => void }) => {
   return (
-    <button
-      onClick={onClick}
-      className="w-full text-left focus:outline-none pl-9"
-    >
+    <button onClick={onClick} className=" text-left focus:outline-none ">
       <Card
         className="
           h-50 w-70
@@ -17,6 +14,7 @@ const CreateNewProjectCard = ({ onClick }: { onClick?: () => void }) => {
           transition-all duration-200 ease-out
           hover:-translate-y-1
           hover:shadow-lg
+          flex flex-col items-center justify-center
         "
       >
         <Card.Body>

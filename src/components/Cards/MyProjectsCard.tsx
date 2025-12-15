@@ -4,10 +4,7 @@ import { FolderIcon } from "@heroicons/react/24/outline";
 
 const MyprojectsCard = () => {
   return (
-    <NavLink
-      to="/projects"
-      className="w-full text-left focus:outline-none pl-9"
-    >
+    <NavLink to="/projects" className=" text-left focus:outline-none ">
       <Card
         className="
           h-50 w-70
@@ -19,6 +16,7 @@ const MyprojectsCard = () => {
           hover:-translate-y-1
           hover:shadow-lg
           group
+          flex flex-col items-center justify-center
         "
       >
         <Card.Body>
