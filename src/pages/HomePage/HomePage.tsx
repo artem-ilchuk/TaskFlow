@@ -1,11 +1,13 @@
-import HeroSection from "../../components/Sections/HeroSection/HeroSection";
+import HeroSection from "../../components/Sections/HeroSection";
 import Benefits from "../../components/Sections/BenefitsSection.jsx/Benefits";
+import Footer from "../../components/Sections/Footer";
 
 const HomePage = () => {
   return (
     <>
       <HeroSection />
       <Benefits />
+      <Footer />
     </>
   );
 };

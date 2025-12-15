@@ -33,8 +33,8 @@ const Benefits = () => {
           </CenterLayout>
         </PadLayout>
         <Columns>
-          <Column>
-            <ul className="flex flex-col">
+          <Column className="flex justify-center">
+            <ul className="flex flex-col items-start gap-6">
               {benefitsDescription.map((item) => (
                 <li className="" key={item.text}>
                   <BenefitsList {...item} />

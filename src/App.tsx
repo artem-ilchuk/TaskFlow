@@ -8,8 +8,8 @@ import { refreshUserThunk } from "./redux/auth/operations";
 import Loader from "./components/Common/Loader/Loader";
 import PublicRoute from "./components/Routes/PublicRoute";
 import PrivateRoute from "./components/Routes/PrivateRoute";
-import PageLayout from "./components/Layout/PageLayout/PageLayout";
-import DashBoardLayout from "./components/Layout/DashBoardLayout/DashBoardLayout";
+import PageLayout from "./components/Layout/PageLayout";
+import DashBoardLayout from "./components/Layout/DashBoardLayout";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const RegistrationPage = lazy(
@@ -67,15 +67,21 @@ function App() {
             </PublicRoute>
           }
         />
-        <Route path="/" element={<PrivateRoute />}>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <DashBoardLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<DashBoardPage />} />
+          <Route path="dashboard" element={<DashBoardPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="projects/:id" element={<ProjectsDetailsPage />} />
+          <Route path="tasks/:id" element={<TasksDetailsPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route element={<DashBoardLayout />}>
-            <Route path="dashboard" element={<DashBoardPage />} />
-            <Route path="projects" element={<ProjectsPage />} />
-            <Route path="projects/:id" element={<ProjectsDetailsPage />} />
-            <Route path="tasks/:id" element={<TasksDetailsPage />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

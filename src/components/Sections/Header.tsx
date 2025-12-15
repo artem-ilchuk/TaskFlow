@@ -1,11 +1,11 @@
-import InlineLayout from "../../Layout/InlineLayout";
-import PadLayout from "../../Layout/PadLayout";
-import { useTheme } from "../../../context/themeContext";
+import InlineLayout from "../Layout/InlineLayout";
+import PadLayout from "../Layout/PadLayout";
+import { useTheme } from "../../context/themeContext";
 import { useSelector } from "react-redux";
-import { selectIsLoggedIn } from "../../../redux/auth/selectors";
+import { selectIsLoggedIn } from "../../redux/auth/selectors";
 import { useNavigate, NavLink } from "react-router-dom";
-import Toggleswitch from "../../Common/ToggleSwitch/Toggleswitch";
-import Avatar from "../../Avatar/Avatar";
+import Toggleswitch from "../Common/ToggleSwitch/Toggleswitch";
+import Avatar from "../Avatar/Avatar";
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();

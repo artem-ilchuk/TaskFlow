@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import PadLayout from "../../Layout/PadLayout";
+import PadLayout from "../Layout/PadLayout";
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);

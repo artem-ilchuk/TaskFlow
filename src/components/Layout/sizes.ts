@@ -36,6 +36,7 @@ export const designTokens = {
     none: "gap-0",
   },
   fractionsSchiema: {
+    "1/7": "grid-cols-7",
     "1/4": "grid-cols-4",
     "1/3": "grid-cols-3",
     "1/2": "grid-cols-2",

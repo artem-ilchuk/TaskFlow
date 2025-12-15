@@ -15,6 +15,7 @@ const initialState = {
   isAuthLoading: false,
   isAuthError: null,
   isRegistering: false,
+  refreshToken: null,
   theme: "light",
 };
 

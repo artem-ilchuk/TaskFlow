@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../Sections/Header/Header";
-import { useTheme } from "../../../context/themeContext";
+import Header from "../Sections/Header";
+
+import { useTheme } from "../../context/themeContext";
 
 const PageLayout = () => {
   const { theme } = useTheme();
