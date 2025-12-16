@@ -1,4 +1,4 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type ProjectCardProps = {
   id: string | number;
@@ -7,14 +7,21 @@ type ProjectCardProps = {
   status?: string;
   deadline?: string;
   img?: string;
-  onclick?: () => void;
 };
 
 const ProjectCard = (props: ProjectCardProps) => {
-  const { id, title, description, status, deadline, img, onclick } = props;
+  const { id, title, description, status, deadline, img } = props;
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/projects/${id}`);
+  };
+
   return (
     <div
-      onClick={onclick}
+      role="button"
+      onClick={handleClick}
       className="cursor-pointer p-4 border rounded-xl shadow-sm hover:shadow-md transition bg-white"
     >
       {img && (

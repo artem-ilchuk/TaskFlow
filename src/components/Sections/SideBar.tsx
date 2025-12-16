@@ -5,7 +5,7 @@ const SideBar = () => {
   return (
     <PadLayout padding={"m"}>
       <nav>
-        <NavLink to="/project"> Projects</NavLink>
+        <NavLink to="/projects"> Projects</NavLink>
       </nav>
     </PadLayout>
   );
