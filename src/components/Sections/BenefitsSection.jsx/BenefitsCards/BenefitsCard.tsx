@@ -1,18 +1,32 @@
 import CountUp from "react-countup";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { Variants, easeOut } from "framer-motion";
 
-const cardVariants = {
+interface BenefitsCardProps {
+  title: number;
+  prefix?: string;
+  text: string;
+  color?: string;
+}
+
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: { duration: 0.6, ease: easeOut },
   },
 };
 
-const BenefitsCard = ({ title, prefix, text, color }) => {
+const BenefitsCard: React.FC<BenefitsCardProps> = ({
+  title,
+  prefix,
+  text,
+  color,
+}) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
+
   return (
     <motion.div
       ref={ref}
