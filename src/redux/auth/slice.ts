@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import {
   loginThunk,
   refreshUserThunk,
@@ -6,23 +6,7 @@ import {
   logoutThunk,
   editUserName,
 } from "./operations";
-
-interface User {
-  name: string | null;
-  email: string | null;
-}
-
-interface AuthState {
-  user: User;
-  token: string | null;
-  isLoggedIn: boolean;
-  isRefreshing: boolean;
-  isAuthLoading: boolean;
-  isAuthError: string | null;
-  isRegistering: boolean;
-  refreshToken: string | null;
-  theme: "light" | "dark";
-}
+import { AuthPayload, User, AuthState } from "../../types/userTypes";
 
 const initialState: AuthState = {
   user: { name: null, email: null },
@@ -59,9 +43,17 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(logoutThunk.fulfilled, () => {
-        const theme = localStorage.getItem("theme") || "light";
-        return { ...initialState, theme };
+        const storedTheme = localStorage.getItem("theme");
+
+        const theme: "light" | "dark" =
+          storedTheme === "dark" ? "dark" : "light";
+
+        return {
+          ...initialState,
+          theme,
+        };
       })
+
       .addCase(refreshUserThunk.fulfilled, (state, { payload }) => {
         const { accessToken, user } = payload;
         if (accessToken) state.token = accessToken;
@@ -83,14 +75,16 @@ const authSlice = createSlice({
         state.isAuthLoading = false;
         state.isLoggedIn = false;
         state.isRefreshing = false;
-        state.isAuthError = payload || "Failed to refresh";
+        state.isAuthError =
+          typeof payload === "string" ? payload : "Failed to refresh";
       })
       .addMatcher(
         isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled),
-        (state, { payload }) => {
-          const user = payload.user || {};
-          state.user.name = payload.user.name ?? null;
-          state.user.email = payload.user.email ?? null;
+        (state, action: PayloadAction<AuthPayload>) => {
+          const payload = action.payload;
+          const user = payload.user || { name: null, email: null };
+          state.user.name = user.name ?? null;
+          state.user.email = user.email ?? null;
           state.token = payload.accessToken;
           state.refreshToken = payload.refreshToken;
           state.isLoggedIn = Boolean(payload.accessToken);
@@ -105,7 +99,7 @@ const authSlice = createSlice({
       })
       .addMatcher(rejectedMatcher, (state, { payload }) => {
         state.isAuthLoading = false;
-        state.isAuthError = payload;
+        state.isAuthError = typeof payload === "string" ? payload : null;
       });
   },
 });
