@@ -1,32 +1,32 @@
-import Card from "../UIComponents/Card";
-import type { Task } from "../../data/projectCards";
+import { useDraggable } from "@dnd-kit/core";
+import { Task } from "../UIComponents/TaskContainer";
 
 type TaskCardProps = {
   task: Task;
 };
 
-export default function TaskCard({ task }: TaskCardProps) {
+const TaskCard = ({ task }: TaskCardProps) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
+
+  const style = transform
+    ? {
+        transform: `translate(${transform.x}px, ${transform.y}px)`,
+      }
+    : undefined;
+
   return (
     <div
-      draggable
-      data-task-id={task.id}
-      className="cursor-grab active:cursor-grabbing"
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="cursor-grab rounded-lg bg-neutral-700 p-4 shadow-sm hover:shadow-md"
+      style={style}
     >
-      <Card title={task.title} className="bg-[#232531] rounded-xl shadow-md">
-        <Card.Header />
-
-        <Card.Body>
-          {task.description && (
-            <p className="text-sm text-gray-400">{task.description}</p>
-          )}
-        </Card.Body>
-
-        <Card.Footer>
-          {task.deadline && (
-            <span className="text-xs text-gray-500">{task.deadline}</span>
-          )}
-        </Card.Footer>
-      </Card>
+      <h3 className="font-medium text-neutral-100">{task.title}</h3>
+      <p className="mt-2 text-sm text-neutral-400">{task.description}</p>
     </div>
   );
-}
+};
+export default TaskCard;
