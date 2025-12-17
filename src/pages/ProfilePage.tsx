@@ -1,4 +1,6 @@
-const ProfilePage = () => {
+import { FC } from "react";
+
+const ProfilePage: FC = () => {
   return <div>ProfilePage</div>;
 };
 

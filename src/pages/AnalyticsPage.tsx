@@ -1,4 +1,6 @@
-const AnalyticsPage = () => {
+import { FC } from "react";
+
+const AnalyticsPage: FC = () => {
   return <div>AnalyticsPage</div>;
 };
 

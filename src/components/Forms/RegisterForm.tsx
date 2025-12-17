@@ -1,20 +1,36 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { PasswordHide } from "../../../hooks/usePasswordVisibility";
-import { registerSchema } from "../../../schemas/authSchemas";
-import PasswordToggle from "../../Common/PasswordToggle/PasswordToggle";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { PasswordHide } from "../../hooks/usePasswordVisibility";
+import { registerSchema } from "../../schemas/authSchemas";
+import PasswordToggle from "../Common/PasswordToggle";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-const createInitialState = () => ({ email: "", password: "", accept: false });
+interface FormState {
+  email: string;
+  password: string;
+  accept: boolean;
+}
 
-const RegisterForm = () => {
-  const [form, setForm] = useState(createInitialState());
-  const [errors, setErrors] = useState({});
+interface FormErrors {
+  email?: string;
+  password?: string;
+  accept?: string;
+}
+
+const createInitialState = (): FormState => ({
+  email: "",
+  password: "",
+  accept: false,
+});
+
+const RegisterForm: React.FC = () => {
+  const [form, setForm] = useState<FormState>(createInitialState());
+  const [errors, setErrors] = useState<FormErrors>({});
   const { passwordVisibility, handlePasswordVisibility } = PasswordHide();
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -22,22 +38,21 @@ const RegisterForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = registerSchema.safeParse(form);
 
     if (!result.success) {
-      const formErrors = {};
+      const formErrors: FormErrors = {};
       result.error.issues.forEach((issue) => {
-        formErrors[issue.path[0]] = issue.message;
+        formErrors[issue.path[0] as keyof FormErrors] = issue.message;
       });
       setErrors(formErrors);
       return;
     }
 
     setErrors({});
-
     setForm(createInitialState());
   };
 

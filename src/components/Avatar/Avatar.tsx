@@ -1,4 +1,4 @@
-const Avatar = () => {
+const Avatar: React.FC = () => {
   return (
     <div className="avatar avatar-online avatar-placeholder">
       <div className="bg-neutral text-neutral-content w-16 rounded-full">

@@ -6,7 +6,7 @@ import PadLayout from "../../Layout/PadLayout";
 import CenterLayout from "../../Layout/CenterLayout";
 import { Columns, Column } from "../../Layout/ColomnLayout";
 
-const Benefits = () => {
+const Benefits: React.FC = () => {
   return (
     <section className="flex flex-col items-center ">
       <PadLayout padding={["l", "s", "l", "s"]}>

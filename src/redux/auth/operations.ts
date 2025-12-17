@@ -94,92 +94,111 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+/* Типы */
+
+interface User {
+  name: string;
+  email: string;
+}
+
+interface AuthResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface RefreshResponse {
+  accessToken: string;
+  user: User;
+}
+
 /* ================= REGISTER ================= */
 
-export const registerThunk = createAsyncThunk(
-  "auth/register",
-  async ({ name, email, password }, thunkAPI) => {
-    try {
-      // ⏳ имитация запроса
-      await new Promise((resolve) => setTimeout(resolve, 500));
+export const registerThunk = createAsyncThunk<
+  AuthResponse, // возвращаемый тип
+  { name: string; email: string; password: string }, // аргументы
+  { rejectValue: string }
+>("auth/register", async ({ name, email, password }, thunkAPI) => {
+  try {
+    // ⏳ имитация запроса
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // ✅ payload ПОД ТВОЙ SLICE
-      return {
-        user: {
-          name,
-          email,
-        },
-        accessToken: "mock-access-token",
-        refreshToken: "mock-refresh-token",
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Register failed");
-    }
+    return {
+      user: {
+        name,
+        email,
+      },
+      accessToken: "mock-access-token",
+      refreshToken: "mock-refresh-token",
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Register failed");
   }
-);
+});
 
 /* ================= LOGIN ================= */
 
-export const loginThunk = createAsyncThunk(
-  "auth/login",
-  async ({ email, password }, thunkAPI) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+export const loginThunk = createAsyncThunk<
+  AuthResponse,
+  { email: string; password: string },
+  { rejectValue: string }
+>("auth/login", async ({ email, password }, thunkAPI) => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 400));
 
-      return {
-        user: {
-          name: "Test User",
-          email,
-        },
-        accessToken: "login-access-token",
-        refreshToken: "login-refresh-token",
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Login failed");
-    }
+    return {
+      user: {
+        name: "Test User",
+        email,
+      },
+      accessToken: "login-access-token",
+      refreshToken: "login-refresh-token",
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Login failed");
   }
-);
+});
 
 /* ================= REFRESH USER ================= */
 
-export const refreshUserThunk = createAsyncThunk(
-  "auth/refresh",
-  async (_, thunkAPI) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 300));
+export const refreshUserThunk = createAsyncThunk<
+  RefreshResponse,
+  void,
+  { rejectValue: string }
+>("auth/refresh", async (_, thunkAPI) => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-      return {
-        accessToken: "refreshed-access-token",
-        user: {
-          name: "Test User",
-          email: "test@mail.com",
-        },
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Refresh failed");
-    }
+    return {
+      accessToken: "refreshed-access-token",
+      user: {
+        name: "Test User",
+        email: "test@mail.com",
+      },
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Refresh failed");
   }
-);
+});
 
 /* ================= LOGOUT ================= */
 
-export const logoutThunk = createAsyncThunk("auth/logout", async () => {
-  return true;
+export const logoutThunk = createAsyncThunk<void>("auth/logout", async () => {
+  return;
 });
 
 /* ================= EDIT USER NAME ================= */
 
-export const editUserName = createAsyncThunk(
-  "auth/editUserName",
-  async (newName, thunkAPI) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 300));
+export const editUserName = createAsyncThunk<
+  { name: string },
+  string,
+  { rejectValue: string }
+>("auth/editUserName", async (newName, thunkAPI) => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-      return {
-        name: newName,
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Edit name failed");
-    }
+    return { name: newName };
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Edit name failed");
   }
-);
+});

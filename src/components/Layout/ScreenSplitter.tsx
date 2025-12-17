@@ -1,6 +1,14 @@
+import React, { ReactNode } from "react";
 import clsx from "clsx";
 
-const ScreenSplitter = ({
+interface ScreenSplitterProps {
+  children: [ReactNode, ReactNode];
+  leftFraction?: number;
+  rightFraction?: number;
+  className?: string;
+}
+
+const ScreenSplitter: React.FC<ScreenSplitterProps> = ({
   children,
   leftFraction = 1,
   rightFraction = 6,

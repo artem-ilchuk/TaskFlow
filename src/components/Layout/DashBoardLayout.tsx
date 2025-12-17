@@ -3,7 +3,7 @@ import SideBar from "../Sections/SideBar";
 import Header from "../Sections/Header";
 import ScreenSplitter from "./ScreenSplitter";
 
-const DashBoardLayout = () => {
+const DashBoardLayout: React.FC = () => {
   return (
     <>
       <Header />

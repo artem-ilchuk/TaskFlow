@@ -1,4 +1,6 @@
-const TasksDetailsPage = () => {
+import { FC } from "react";
+
+const TasksDetailsPage: FC = () => {
   return <div>TasksDetailsPage</div>;
 };
 

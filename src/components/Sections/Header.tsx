@@ -4,10 +4,10 @@ import { useTheme } from "../../context/themeContext";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
 import { useNavigate, NavLink } from "react-router-dom";
-import Toggleswitch from "../Common/ToggleSwitch/Toggleswitch";
+import Toggleswitch from "../Common/Toggleswitch";
 import Avatar from "../Avatar/Avatar";
 
-const Header = () => {
+const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import TaskColumn from "../../components/UIComponents/TaskContainer";
-import { Column, Task } from "../../components/UIComponents/TaskContainer";
+import TaskColumn from "../components/UIComponents/TaskContainer";
+import { Column, Task } from "../components/UIComponents/TaskContainer";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 export const COLUMNS: Column[] = [

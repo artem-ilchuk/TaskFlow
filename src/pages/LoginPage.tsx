@@ -1,6 +1,7 @@
-import LoginForm from "../../components/Forms/LoginForm/LoginForm";
+import { FC } from "react";
+import LoginForm from "../components/Forms/LoginForm";
 
-const LoginPage = () => {
+const LoginPage: FC = () => {
   return (
     <main className="h-[50vh] flex items-center justify-center px-4">
       <LoginForm />

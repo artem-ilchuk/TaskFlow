@@ -1,11 +1,12 @@
-import TextType from "../../components/UIComponents/TextTyping";
-import PadLayout from "../../components/Layout/PadLayout";
-import CreateNewProjectCard from "../../components/Cards/CreateNewProjectCard";
-import MyprojectsCard from "../../components/Cards/MyProjectsCard";
-import InlineLayout from "../../components/Layout/InlineLayout";
-import GridLayout from "../../components/Layout/GridLayout";
+import { FC } from "react";
 
-const DashBoardPage = () => {
+import TextType from "../components/UIComponents/TextTyping";
+import PadLayout from "../components/Layout/PadLayout";
+import CreateNewProjectCard from "../components/Cards/CreateNewProjectCard";
+import MyprojectsCard from "../components/Cards/MyProjectsCard";
+import GridLayout from "../components/Layout/GridLayout";
+
+const DashBoardPage: FC = () => {
   return (
     <>
       <PadLayout padding={["m", "m", "m", "s"]}>

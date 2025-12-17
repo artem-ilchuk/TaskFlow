@@ -1,4 +1,6 @@
-const Toggleswitch = ({ theme, toggleTheme }) => {
+import { ToggleswitchProps } from "../../types/common";
+
+const Toggleswitch: React.FC<ToggleswitchProps> = ({ theme, toggleTheme }) => {
   return (
     <label className="flex cursor-pointer gap-2 items-center">
       <svg

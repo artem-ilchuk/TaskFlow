@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import PadLayout from "../Layout/PadLayout";
+import { FC } from "react";
 
-const SideBar = () => {
+const SideBar: FC = () => {
   return (
     <PadLayout padding={"m"}>
       <nav>

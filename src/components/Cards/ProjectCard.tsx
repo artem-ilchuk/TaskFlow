@@ -1,15 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { ProjectCardProps } from "../../types/project";
 
-type ProjectCardProps = {
-  id: string | number;
-  title: string;
-  description?: string;
-  status?: string;
-  deadline?: string;
-  img?: string;
-};
-
-const ProjectCard = (props: ProjectCardProps) => {
+const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps) => {
   const { id, title, description, status, deadline, img } = props;
 
   const navigate = useNavigate();

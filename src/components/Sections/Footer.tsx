@@ -1,4 +1,4 @@
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
       <aside>

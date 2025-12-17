@@ -1,6 +1,7 @@
-import RegisterForm from "../../components/Forms/RegisterForm/RegisterForm";
+import { FC } from "react";
+import RegisterForm from "../components/Forms/RegisterForm";
 
-const RegistrationPage = () => {
+const RegistrationPage: FC = () => {
   return (
     <main className="min-h-screen flex items-center justify-center">
       <RegisterForm />

@@ -2,7 +2,7 @@ import Card from "../UIComponents/Card";
 import { NavLink } from "react-router-dom";
 import { FolderIcon } from "@heroicons/react/24/outline";
 
-const MyprojectsCard = () => {
+const MyprojectsCard: React.FC = () => {
   return (
     <NavLink to="/projects" className=" text-left focus:outline-none ">
       <Card

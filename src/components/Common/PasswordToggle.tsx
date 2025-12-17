@@ -1,8 +1,12 @@
 import { memo } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { PasswordToggleProps } from "../../types/common";
 
-const PasswordToggle = ({ visible, onClick }) => {
+const PasswordToggle: React.FC<PasswordToggleProps> = ({
+  visible,
+  onClick,
+}) => {
   return (
     <button
       type="button"

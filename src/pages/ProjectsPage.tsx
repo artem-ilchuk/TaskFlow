@@ -1,8 +1,8 @@
-import { data } from "../../data/projectCards";
-import PadLayout from "../../components/Layout/PadLayout";
-import ProjectCard from "../../components/Cards/ProjectCard";
+import { FC } from "react";
+import { data } from "../data/projectCards";
+import ProjectCard from "../components/Cards/ProjectCard";
 
-const ProjectsPage = () => {
+const ProjectsPage: FC = () => {
   const projects = data.projects.allIds.map((id) => data.projects.byId[id]);
 
   return (

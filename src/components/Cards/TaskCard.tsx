@@ -1,11 +1,8 @@
 import { useDraggable } from "@dnd-kit/core";
-import { Task } from "../UIComponents/TaskContainer";
 
-type TaskCardProps = {
-  task: Task;
-};
+import { TaskCardProps } from "../../types/project";
 
-const TaskCard = ({ task }: TaskCardProps) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task }: TaskCardProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
   });

@@ -2,13 +2,7 @@ import CountUp from "react-countup";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Variants, easeOut } from "framer-motion";
-
-interface BenefitsCardProps {
-  title: number;
-  prefix?: string;
-  text: string;
-  color?: string;
-}
+import { BenefitsCardProps } from "../../../../types/homeTypes";
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50 },

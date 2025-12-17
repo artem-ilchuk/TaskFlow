@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./auth/slice";
-import { tasksReducer } from "./tasks/slice";
 import { filterReducer } from "./filters/slice";
 import {
   persistStore,
@@ -25,7 +24,6 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    tasks: tasksReducer,
     filter: filterReducer,
     auth: persistedReducer,
   },
@@ -36,5 +34,8 @@ export const store = configureStore({
       },
     }),
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export const persistor = persistStore(store);

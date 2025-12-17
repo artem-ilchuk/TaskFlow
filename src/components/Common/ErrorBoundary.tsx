@@ -1,6 +1,6 @@
 import { FallbackProps } from "react-error-boundary";
 
-const ErrorBoundaryFallback = ({
+const ErrorBoundaryFallback: React.FC<FallbackProps> = ({
   error,
   resetErrorBoundary,
 }: FallbackProps) => {

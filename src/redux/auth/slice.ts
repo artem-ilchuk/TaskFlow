@@ -7,7 +7,24 @@ import {
   editUserName,
 } from "./operations";
 
-const initialState = {
+interface User {
+  name: string | null;
+  email: string | null;
+}
+
+interface AuthState {
+  user: User;
+  token: string | null;
+  isLoggedIn: boolean;
+  isRefreshing: boolean;
+  isAuthLoading: boolean;
+  isAuthError: string | null;
+  isRegistering: boolean;
+  refreshToken: string | null;
+  theme: "light" | "dark";
+}
+
+const initialState: AuthState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,

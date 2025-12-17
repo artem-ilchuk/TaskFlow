@@ -1,7 +1,10 @@
 import Card from "../UIComponents/Card";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { CreateNewProjectCardProps } from "../../types/project";
 
-const CreateNewProjectCard = ({ onClick }: { onClick?: () => void }) => {
+const CreateNewProjectCard: React.FC<CreateNewProjectCardProps> = ({
+  onClick,
+}) => {
   return (
     <button onClick={onClick} className=" text-left focus:outline-none ">
       <Card

@@ -1,20 +1,30 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { PasswordHide } from "../../../hooks/usePasswordVisibility";
-import { loginSchema } from "../../../schemas/authSchemas";
-import PasswordToggle from "../../Common/PasswordToggle/PasswordToggle";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { PasswordHide } from "../../hooks/usePasswordVisibility";
+import { loginSchema } from "../../schemas/authSchemas";
+import PasswordToggle from "../Common/PasswordToggle";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-const createInitialState = () => ({ email: "", password: "" });
+interface FormState {
+  email: string;
+  password: string;
+}
 
-const LoginForm = () => {
-  const [form, setForm] = useState(createInitialState());
-  const [errors, setErrors] = useState({});
+interface FormErrors {
+  email?: string;
+  password?: string;
+}
+
+const createInitialState = (): FormState => ({ email: "", password: "" });
+
+const LoginForm: React.FC = () => {
+  const [form, setForm] = useState<FormState>(createInitialState());
+  const [errors, setErrors] = useState<FormErrors>({});
   const { passwordVisibility, handlePasswordVisibility } = PasswordHide();
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -22,22 +32,21 @@ const LoginForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = loginSchema.safeParse(form);
 
     if (!result.success) {
-      const formErrors = {};
+      const formErrors: FormErrors = {};
       result.error.issues.forEach((issue) => {
-        formErrors[issue.path[0]] = issue.message;
+        formErrors[issue.path[0] as keyof FormErrors] = issue.message;
       });
       setErrors(formErrors);
       return;
     }
 
     setErrors({});
-
     setForm(createInitialState());
   };
 
@@ -49,8 +58,8 @@ const LoginForm = () => {
     >
       <fieldset
         className="relative fieldset bg-base-200 border-base-300 rounded-box 
-  w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto
-  border p-4 sm:px-6 md:px-8 lg:px-10 xl:px-12"
+          w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto
+          border p-4 sm:px-6 md:px-8 lg:px-10 xl:px-12"
       >
         <legend className="fieldset-legend text-base">Login</legend>
 

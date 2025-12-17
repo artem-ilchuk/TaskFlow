@@ -1,4 +1,4 @@
-const Loader = () => {
+const Loader: React.FC = () => {
   return <div>Loader</div>;
 };
 
