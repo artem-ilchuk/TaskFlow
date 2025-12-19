@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { ProjectCardProps } from "../../types/project";
+import React, { memo, useCallback } from "react";
 
 const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps) => {
   const { id, title, description, status, deadline, img } = props;
 
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`/projects/${id}`);
-  };
+  const handleClick = useCallback(() => {
+    navigate(`/dashboard/projects/${id}`);
+  }, [navigate, id]);
 
   return (
     <div
@@ -35,4 +36,4 @@ const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps) => {
   );
 };
 
-export default ProjectCard;
+export default memo(ProjectCard);

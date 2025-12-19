@@ -5,6 +5,7 @@ import { benefitsDescription } from "../../../data/benefitsDescription";
 import PadLayout from "../../Layout/PadLayout";
 import CenterLayout from "../../Layout/CenterLayout";
 import { Columns, Column } from "../../Layout/ColomnLayout";
+import React, { memo, useMemo } from "react";
 
 const Benefits: React.FC = () => {
   return (
@@ -48,4 +49,4 @@ const Benefits: React.FC = () => {
   );
 };
 
-export default Benefits;
+export default memo(Benefits);

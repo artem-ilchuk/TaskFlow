@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../Sections/SideBar";
 import Header from "../Sections/Header";
 import ScreenSplitter from "./ScreenSplitter";
+import React, { memo } from "react";
 
 const DashBoardLayout: React.FC = () => {
   return (
@@ -17,4 +18,4 @@ const DashBoardLayout: React.FC = () => {
   );
 };
 
-export default DashBoardLayout;
+export default memo(DashBoardLayout);

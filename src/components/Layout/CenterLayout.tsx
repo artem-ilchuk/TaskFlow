@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import clsx from "clsx";
 
 type CenterProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -19,9 +19,14 @@ export const CenterLayout: React.FC<CenterProps> = (props: CenterProps) => {
     ...otherProps
   } = props;
 
-  const style = maxWidth
-    ? { maxWidth, marginLeft: "auto", marginRight: "auto" }
-    : undefined;
+  const style = useMemo(() => {
+    if (!maxWidth) return undefined;
+    return {
+      maxWidth,
+      marginLeft: "auto",
+      marginRight: "auto",
+    };
+  }, [maxWidth]);
 
   return (
     <div
@@ -39,4 +44,4 @@ export const CenterLayout: React.FC<CenterProps> = (props: CenterProps) => {
   );
 };
 
-export default CenterLayout;
+export default memo(CenterLayout);

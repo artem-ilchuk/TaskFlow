@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import clsx from "clsx";
 import { SpaceKeys, designTokens } from "./sizes";
 
@@ -15,34 +15,34 @@ export const PadLayout: React.FC<PadProps> = ({
   className,
   children,
   ...otherProps
-}: PadProps) => {
-  let paddingClasses: string[] = [];
+}) => {
+  const paddingClass = useMemo(() => {
+    const classes: string[] = [];
 
-  if (!padding) {
-    paddingClasses.push(designTokens.padding.none);
-  } else if (typeof padding === "string") {
-    paddingClasses.push(designTokens.padding[padding]);
-  } else if (Array.isArray(padding)) {
-    const [t, r, b, l] = padding;
-    paddingClasses.push(
-      t ? designTokens.paddingSides[t].t : "",
-      r ? designTokens.paddingSides[r].r : "",
-      b ? designTokens.paddingSides[b].b : "",
-      l ? designTokens.paddingSides[l].l : ""
-    );
-  } else if (typeof padding === "object") {
-    paddingClasses.push(
-      ...Object.entries(padding).map(
-        ([bp, val]) => `${bp}:${designTokens.padding[val as SpaceKeys]}`
-      )
-    );
-  }
+    if (!padding) {
+      classes.push(designTokens.padding.none);
+    } else if (typeof padding === "string") {
+      classes.push(designTokens.padding[padding]);
+    } else if (Array.isArray(padding)) {
+      const [t, r, b, l] = padding;
+      if (t) classes.push(designTokens.paddingSides[t].t);
+      if (r) classes.push(designTokens.paddingSides[r].r);
+      if (b) classes.push(designTokens.paddingSides[b].b);
+      if (l) classes.push(designTokens.paddingSides[l].l);
+    } else if (typeof padding === "object") {
+      Object.entries(padding).forEach(([bp, val]) => {
+        classes.push(`${bp}:${designTokens.padding[val as SpaceKeys]}`);
+      });
+    }
+
+    return classes.join(" ");
+  }, [padding]);
 
   return (
-    <div {...otherProps} className={clsx(paddingClasses, className)}>
+    <div {...otherProps} className={clsx(paddingClass, className)}>
       {children}
     </div>
   );
 };
 
-export default PadLayout;
+export default memo(PadLayout);

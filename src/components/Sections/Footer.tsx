@@ -1,3 +1,5 @@
+import React, { memo } from "react";
+
 const Footer: React.FC = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
@@ -61,4 +63,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

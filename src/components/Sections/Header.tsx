@@ -1,3 +1,4 @@
+import React, { useCallback } from "react";
 import InlineLayout from "../Layout/InlineLayout";
 import PadLayout from "../Layout/PadLayout";
 import { useTheme } from "../../context/themeContext";
@@ -12,9 +13,9 @@ const Header: React.FC = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigate = useNavigate();
 
-  const handleRegistration = () => {
+  const handleRegistration = useCallback(() => {
     navigate("/register");
-  };
+  }, [navigate]);
 
   return (
     <header className=" mx-auto ">
@@ -61,4 +62,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

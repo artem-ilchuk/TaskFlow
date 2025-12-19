@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Variants, easeOut } from "framer-motion";
 import { BenefitsCardProps } from "../../../../types/homeTypes";
+import React, { memo } from "react";
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
@@ -47,4 +48,4 @@ const BenefitsCard: React.FC<BenefitsCardProps> = ({
   );
 };
 
-export default BenefitsCard;
+export default memo(BenefitsCard);

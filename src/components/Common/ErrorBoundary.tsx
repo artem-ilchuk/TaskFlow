@@ -1,4 +1,5 @@
 import { FallbackProps } from "react-error-boundary";
+import React, { memo } from "react";
 
 const ErrorBoundaryFallback: React.FC<FallbackProps> = ({
   error,
@@ -23,4 +24,5 @@ const ErrorBoundaryFallback: React.FC<FallbackProps> = ({
     </div>
   );
 };
-export default ErrorBoundaryFallback;
+
+export default memo(ErrorBoundaryFallback);

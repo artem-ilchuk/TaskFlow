@@ -10,7 +10,7 @@ import PublicRoute from "./components/Routes/PublicRoute";
 import PrivateRoute from "./components/Routes/PrivateRoute";
 import PageLayout from "./components/Layout/PageLayout";
 import DashBoardLayout from "./components/Layout/DashBoardLayout";
-import { AppDispatch, RootState } from "./redux/store";
+import { AppDispatch } from "./redux/store";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RegistrationPage = lazy(() => import("./pages/RegistrationPage"));
@@ -25,17 +25,14 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const isRefreshing = useSelector((state: RootState) =>
-    selectIsRefreshing(state)
-  );
+
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
     dispatch(refreshUserThunk());
   }, [dispatch]);
 
-  if (isRefreshing) return null;
-
-  return (
+  return isRefreshing ? null : (
     <Suspense fallback={<Loader />}>
       <Routes>
         <Route element={<PageLayout />}>
@@ -48,6 +45,7 @@ const App: React.FC = () => {
             }
           />
         </Route>
+
         <Route
           path="/register"
           element={
@@ -64,8 +62,9 @@ const App: React.FC = () => {
             </PublicRoute>
           }
         />
+
         <Route
-          path="/"
+          path="/dashboard/*"
           element={
             <PrivateRoute>
               <DashBoardLayout />
@@ -73,7 +72,6 @@ const App: React.FC = () => {
           }
         >
           <Route index element={<DashBoardPage />} />
-          <Route path="dashboard" element={<DashBoardPage />} />
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/:id" element={<ProjectsDetailsPage />} />
           <Route path="tasks/:id" element={<TasksDetailsPage />} />
@@ -81,6 +79,7 @@ const App: React.FC = () => {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

@@ -1,12 +1,11 @@
-import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, isAnyOf } from "@reduxjs/toolkit";
 import {
   loginThunk,
   refreshUserThunk,
   registerThunk,
   logoutThunk,
-  editUserName,
 } from "./operations";
-import { AuthPayload, User, AuthState } from "../../types/userTypes";
+import { AuthState, AuthResponse } from "../../types/userTypes";
 
 const initialState: AuthState = {
   user: { name: null, email: null },
@@ -17,92 +16,71 @@ const initialState: AuthState = {
   isAuthError: null,
   isRegistering: false,
   refreshToken: null,
-  theme: "light",
 };
-
-const pendingMatcher = isAnyOf(
-  loginThunk.pending,
-  registerThunk.pending,
-  refreshUserThunk.pending
-);
-const rejectedMatcher = isAnyOf(
-  loginThunk.rejected,
-  registerThunk.rejected,
-  refreshUserThunk.rejected
-);
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    themeToggle: (state) => {
-      state.theme = state.theme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", state.theme);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(logoutThunk.fulfilled, () => {
-        const storedTheme = localStorage.getItem("theme");
-
-        const theme: "light" | "dark" =
-          storedTheme === "dark" ? "dark" : "light";
-
-        return {
-          ...initialState,
-          theme,
-        };
-      })
-
-      .addCase(refreshUserThunk.fulfilled, (state, { payload }) => {
-        const { accessToken, user } = payload;
-        if (accessToken) state.token = accessToken;
-        if (user) state.user = user;
-        state.isLoggedIn = Boolean(state.token);
-        state.isRefreshing = false;
-        state.isAuthError = null;
-        state.isAuthLoading = false;
+      .addCase(registerThunk.pending, (state) => {
+        state.isRegistering = true;
       })
       .addCase(refreshUserThunk.pending, (state) => {
         state.isRefreshing = true;
-        state.isAuthLoading = true;
-        state.isAuthError = null;
       })
-      .addCase(refreshUserThunk.rejected, (state, { payload }) => {
-        state.user = { name: null, email: null };
-        state.token = null;
-        state.refreshToken = null;
-        state.isAuthLoading = false;
-        state.isLoggedIn = false;
+      .addCase(refreshUserThunk.fulfilled, (state, { payload }) => {
+        if (payload.accessToken) {
+          state.token = payload.accessToken;
+        }
+        state.user = payload.user;
+        state.isLoggedIn = true;
         state.isRefreshing = false;
-        state.isAuthError =
-          typeof payload === "string" ? payload : "Failed to refresh";
+        state.isAuthLoading = false;
+      })
+      .addCase(refreshUserThunk.rejected, (state) => {
+        state.isRefreshing = false;
+        state.isAuthLoading = false;
+        state.token = null;
+      })
+      .addCase(logoutThunk.fulfilled, (state) => {
+        return initialState;
       })
       .addMatcher(
         isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled),
-        (state, action: PayloadAction<AuthPayload>) => {
-          const payload = action.payload;
-          const user = payload.user || { name: null, email: null };
-          state.user.name = user.name ?? null;
-          state.user.email = user.email ?? null;
-          state.token = payload.accessToken;
-          state.refreshToken = payload.refreshToken;
-          state.isLoggedIn = Boolean(payload.accessToken);
+        (state, action: PayloadAction<AuthResponse>) => {
+          const { user, accessToken, refreshToken } = action.payload;
+          state.user = user;
+          state.token = accessToken;
+          state.refreshToken = refreshToken;
+          state.isLoggedIn = true;
           state.isAuthLoading = false;
-          state.isAuthError = null;
           state.isRegistering = false;
+          state.isAuthError = null;
         }
       )
-      .addMatcher(pendingMatcher, (state) => {
-        state.isAuthLoading = true;
-        state.isAuthError = null;
-      })
-      .addMatcher(rejectedMatcher, (state, { payload }) => {
-        state.isAuthLoading = false;
-        state.isAuthError = typeof payload === "string" ? payload : null;
-      });
+      .addMatcher(
+        isAnyOf(registerThunk.rejected, loginThunk.rejected),
+        (state, { payload }) => {
+          state.isAuthLoading = false;
+          state.isRegistering = false;
+          state.isAuthError =
+            typeof payload === "string" ? payload : "Auth error";
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          registerThunk.pending,
+          loginThunk.pending,
+          refreshUserThunk.pending
+        ),
+        (state) => {
+          state.isAuthLoading = true;
+          state.isAuthError = null;
+        }
+      );
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const { themeToggle } = authSlice.actions;

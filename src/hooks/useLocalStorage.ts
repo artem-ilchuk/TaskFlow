@@ -1,4 +1,10 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from "react";
 
 export function useLocalStorage<T>(
   key: string,
@@ -13,6 +19,10 @@ export function useLocalStorage<T>(
     }
   });
 
+  const setStoredValue: Dispatch<SetStateAction<T>> = useCallback((val) => {
+    setValue(val);
+  }, []);
+
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -21,5 +31,5 @@ export function useLocalStorage<T>(
     }
   }, [key, value]);
 
-  return [value, setValue];
+  return [value, setStoredValue];
 }

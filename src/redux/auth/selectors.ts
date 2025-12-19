@@ -1,10 +1,37 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-export const selectUser = (state: RootState) => state.auth.user;
-export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
-export const selectIsRefreshing = (state: RootState) => state.auth.isRefreshing;
-export const selectIsAuthLoading = (state: RootState) =>
-  state.auth.isAuthLoading;
-export const selectIsAuthError = (state: RootState) => state.auth.isAuthError;
-export const selectIsRegistering = (state: RootState) =>
-  state.auth.isRegistering;
+const selectAuth = (state: RootState) => state.auth;
+
+export const selectUser = createSelector([selectAuth], (auth) => auth.user);
+export const selectIsLoggedIn = createSelector(
+  [selectAuth],
+  (auth) => auth.isLoggedIn
+);
+export const selectIsRefreshing = createSelector(
+  [selectAuth],
+  (auth) => auth.isRefreshing
+);
+
+export const selectIsAuthLoading = createSelector(
+  [selectAuth],
+  (auth) => auth.isAuthLoading
+);
+export const selectIsAuthError = createSelector(
+  [selectAuth],
+  (auth) => auth.isAuthError
+);
+export const selectIsRegistering = createSelector(
+  [selectAuth],
+  (auth) => auth.isRegistering
+);
+
+export const selectAuthStatus = createSelector(
+  [selectIsLoggedIn, selectIsRefreshing, selectIsAuthLoading],
+  (isLoggedIn, isRefreshing, isLoading) => ({
+    isLoggedIn,
+    isRefreshing,
+    isLoading,
+    shouldShowLoader: isRefreshing || isLoading,
+  })
+);

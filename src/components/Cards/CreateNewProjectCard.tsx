@@ -1,6 +1,7 @@
 import Card from "../UIComponents/Card";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { CreateNewProjectCardProps } from "../../types/project";
+import React, { memo } from "react";
 
 const CreateNewProjectCard: React.FC<CreateNewProjectCardProps> = ({
   onClick,
@@ -15,6 +16,7 @@ const CreateNewProjectCard: React.FC<CreateNewProjectCardProps> = ({
           border border-blue-300
           shadow-sm
           transition-all duration-200 ease-out
+          focus:outline-none cursor-pointer
           hover:-translate-y-1
           hover:shadow-lg
           flex flex-col items-center justify-center
@@ -36,4 +38,4 @@ const CreateNewProjectCard: React.FC<CreateNewProjectCardProps> = ({
     </button>
   );
 };
-export default CreateNewProjectCard;
+export default memo(CreateNewProjectCard);

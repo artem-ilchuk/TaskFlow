@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import { AlignKeys, JustifyKeys, SpaceKeys, designTokens } from "./sizes";
 import clsx from "clsx";
 
@@ -12,25 +12,22 @@ type InlineProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
 };
 
-export const InlineLayout: React.FC<InlineProps> = (props: InlineProps) => {
-  const {
-    gap = "none",
-    justify = "center",
-    align = "center",
-    className,
-    children,
-    ...otherProps
-  } = props;
-
-  let gapClass = "";
-
-  if (typeof gap === "string") {
-    gapClass = designTokens.gapClasses[gap];
-  } else {
-    gapClass = Object.entries(gap)
+export const InlineLayout: React.FC<InlineProps> = ({
+  gap = "none",
+  justify = "center",
+  align = "center",
+  className,
+  children,
+  ...otherProps
+}) => {
+  const gapClass = useMemo(() => {
+    if (typeof gap === "string") {
+      return designTokens.gapClasses[gap];
+    }
+    return Object.entries(gap)
       .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
       .join(" ");
-  }
+  }, [gap]);
 
   const justifyClass = designTokens.justifySchiema[justify];
   const alignClass = designTokens.alignSchiema[align];
@@ -51,4 +48,4 @@ export const InlineLayout: React.FC<InlineProps> = (props: InlineProps) => {
   );
 };
 
-export default InlineLayout;
+export default memo(InlineLayout);

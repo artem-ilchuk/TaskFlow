@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { NavLink } from "react-router-dom";
 import PadLayout from "../Layout/PadLayout";
 
@@ -54,4 +54,4 @@ const HeroSection: React.FC = () => {
   );
 };
 
-export default HeroSection;
+export default memo(HeroSection);

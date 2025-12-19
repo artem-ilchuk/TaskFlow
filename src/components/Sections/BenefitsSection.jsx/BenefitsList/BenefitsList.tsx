@@ -1,6 +1,7 @@
 import { GiCheckMark } from "react-icons/gi";
 import InlineLayout from "../../../Layout/InlineLayout";
 import { BenefitsListProps } from "../../../../types/homeTypes";
+import React, { memo } from "react";
 
 const BenefitsList: React.FC<BenefitsListProps> = ({ text }) => {
   return (
@@ -15,4 +16,4 @@ const BenefitsList: React.FC<BenefitsListProps> = ({ text }) => {
   );
 };
 
-export default BenefitsList;
+export default memo(BenefitsList);

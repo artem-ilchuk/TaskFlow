@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export const PasswordHide = (): {
   passwordVisibility: boolean;
@@ -6,9 +6,9 @@ export const PasswordHide = (): {
 } => {
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
 
-  const handlePasswordVisibility = () => {
-    setPasswordVisibility(!passwordVisibility);
-  };
+  const handlePasswordVisibility = useCallback(() => {
+    setPasswordVisibility((prev) => !prev);
+  }, []);
 
   return { passwordVisibility, handlePasswordVisibility };
 };

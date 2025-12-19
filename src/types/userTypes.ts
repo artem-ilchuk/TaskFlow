@@ -18,5 +18,30 @@ export interface AuthState {
   isAuthError: string | null;
   isRegistering: boolean;
   refreshToken: string | null;
-  theme: "light" | "dark";
+}
+
+export interface AuthResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface RefreshResponse {
+  user: User;
+  accessToken: string;
+}
+
+export interface RegisterCredentials {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface EditNamePayload {
+  name: string;
 }

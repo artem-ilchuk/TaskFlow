@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import React, { ReactNode, memo } from "react";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 interface PublicRouteProps {
   children: ReactNode;
@@ -9,12 +9,8 @@ interface PublicRouteProps {
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const location = useLocation();
 
-  // Если есть state.from, редирект туда, иначе на "/"
-  const redirectTo = (location.state as { from?: string })?.from || "/";
-
-  return isLoggedIn ? <Navigate to={redirectTo} replace /> : <>{children}</>;
+  return isLoggedIn ? <Navigate to="/dashboard" replace /> : <> {children} </>;
 };
 
-export default PublicRoute;
+export default memo(PublicRoute);

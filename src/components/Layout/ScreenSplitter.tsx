@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo, memo } from "react";
 import clsx from "clsx";
 
 interface ScreenSplitterProps {
@@ -16,17 +16,20 @@ const ScreenSplitter: React.FC<ScreenSplitterProps> = ({
 }) => {
   const [left, right] = children;
 
+  const leftStyle = useMemo(() => ({ flex: leftFraction }), [leftFraction]);
+  const rightStyle = useMemo(() => ({ flex: rightFraction }), [rightFraction]);
+
   return (
     <div className={clsx("flex w-full", className)}>
-      <aside className="shrink-0" style={{ flex: leftFraction }}>
+      <aside className="shrink-0" style={leftStyle}>
         {left}
       </aside>
 
-      <section className="flex-1" style={{ flex: rightFraction }}>
+      <section className="flex-1" style={rightStyle}>
         {right}
       </section>
     </div>
   );
 };
 
-export default ScreenSplitter;
+export default memo(ScreenSplitter);

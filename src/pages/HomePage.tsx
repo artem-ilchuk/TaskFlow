@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import HeroSection from "../components/Sections/HeroSection";
 import Benefits from "../components/Sections/BenefitsSection.jsx/Benefits";
@@ -14,4 +14,4 @@ const HomePage: FC = () => {
   );
 };
 
-export default HomePage;
+export default React.memo(HomePage);

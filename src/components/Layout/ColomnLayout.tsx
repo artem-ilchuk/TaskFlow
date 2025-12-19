@@ -1,5 +1,4 @@
-import React from "react";
-import { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo, memo } from "react";
 import clsx from "clsx";
 import { SpaceKeys, designTokens } from "./sizes";
 
@@ -20,51 +19,59 @@ type ColumnProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const ColumnsContext = createContext({ columns: 1 });
 
-export const Columns: React.FC<ColumnsProps> = (props: ColumnsProps) => {
-  const {
-    columns = 1,
-    gap = "none",
-    className,
-    children,
-    ...otherProps
-  } = props;
+export const Columns: React.FC<ColumnsProps> = memo(
+  ({ columns = 1, gap = "none", className, children, ...otherProps }) => {
+    // 1. Мемоизируем расчет классов для gap
+    const gapClass = useMemo(() => {
+      if (typeof gap === "string") {
+        return designTokens.gapClasses[gap];
+      }
+      return Object.entries(gap)
+        .map(
+          ([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`
+        )
+        .join(" ");
+    }, [gap]);
 
-  let gapClass = "";
+    const gridStyle = useMemo(
+      () => ({
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+      }),
+      [columns]
+    );
 
-  if (typeof gap === "string") {
-    gapClass = designTokens.gapClasses[gap];
-  } else {
-    gapClass = Object.entries(gap)
-      .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
-      .join(" ");
+    const contextValue = useMemo(() => ({ columns }), [columns]);
+
+    return (
+      <ColumnsContext.Provider value={contextValue}>
+        <div
+          {...otherProps}
+          style={gridStyle}
+          className={clsx("grid", gapClass, className)}
+        >
+          {children}
+        </div>
+      </ColumnsContext.Provider>
+    );
   }
+);
 
-  const columnsClasses = `grid-cols-[repeat(${columns},_1fr)]`;
+export const Column: React.FC<ColumnProps> = memo(
+  ({ span = 1, className, children, ...otherProps }) => {
+    const { columns } = useContext(ColumnsContext);
+    const limitedSpan = Math.min(span, columns);
 
-  return (
-    <ColumnsContext.Provider value={{ columns }}>
-      <div
-        {...otherProps}
-        className={clsx("grid", columnsClasses, gapClass, className)}
-      >
+    const spanStyle = useMemo(
+      () => ({
+        gridColumn: `span ${limitedSpan} / span ${limitedSpan}`,
+      }),
+      [limitedSpan]
+    );
+
+    return (
+      <div {...otherProps} style={spanStyle} className={className}>
         {children}
       </div>
-    </ColumnsContext.Provider>
-  );
-};
-
-export const Column: React.FC<ColumnProps> = (props: ColumnProps) => {
-  const { span = 1, className, children, ...otherProps } = props;
-
-  const { columns } = useContext(ColumnsContext);
-
-  const limitedSpan = Math.min(span, columns);
-
-  const spanClass = `col-span-${limitedSpan}`;
-
-  return (
-    <div {...otherProps} className={clsx(spanClass, className)}>
-      {children}
-    </div>
-  );
-};
+    );
+  }
+);

@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Theme, ThemeContextType } from "../types/common";
 
@@ -11,18 +18,25 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useLocalStorage<Theme>("theme", "light");
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
+  }, [setTheme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  const value = useMemo(
+    () => ({
+      theme,
+      setTheme,
+      toggleTheme,
+    }),
+    [theme, setTheme, toggleTheme]
+  );
+
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 

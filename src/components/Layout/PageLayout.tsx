@@ -8,7 +8,7 @@ const PageLayout: React.FC = () => {
 
   return (
     <div
-      className="bg-bg text-text min-h-screen transition-colors duration-500"
+      className="container mx-auto bg-bg text-text min-h-screen transition-colors duration-500"
       data-theme={theme}
     >
       <Header />
@@ -19,4 +19,4 @@ const PageLayout: React.FC = () => {
   );
 };
 
-export default PageLayout;
+export default React.memo(PageLayout);

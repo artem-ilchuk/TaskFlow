@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import { SpaceKeys, designTokens } from "./sizes";
 import clsx from "clsx";
 
@@ -11,35 +11,39 @@ type GridProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
 };
 
-export const GridLayout: React.FC<GridProps> = (props: GridProps) => {
-  const {
-    gap = "s",
-    minItemWidth = "200px",
-    className,
-    children,
-    ...otherProps
-  } = props;
-
-  let gapClass = "";
-
-  if (typeof gap === "string") {
-    gapClass = designTokens.gapClasses[gap];
-  } else {
-    gapClass = Object.entries(gap)
+export const GridLayout: React.FC<GridProps> = ({
+  gap = "s",
+  minItemWidth = "200px",
+  className,
+  children,
+  ...otherProps
+}) => {
+  const gapClass = useMemo(() => {
+    if (typeof gap === "string") {
+      return designTokens.gapClasses[gap];
+    }
+    return Object.entries(gap)
       .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
       .join(" ");
-  }
+  }, [gap]);
 
-  const gridColsClass = `grid-cols-[repeat(auto-fit,minmax(min(${minItemWidth},100%),1fr))]`;
+  const gridStyle = useMemo(
+    () => ({
+      display: "grid",
+      gridTemplateColumns: `repeat(auto-fit, minmax(min(${minItemWidth}, 100%), 1fr))`,
+    }),
+    [minItemWidth]
+  );
 
   return (
     <div
       {...otherProps}
-      className={clsx("grid", gridColsClass, gapClass, className)}
+      style={gridStyle}
+      className={clsx("grid", gapClass, className)}
     >
       {children}
     </div>
   );
 };
 
-export default GridLayout;
+export default memo(GridLayout);

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
 import { Navigate, useLocation } from "react-router-dom";
@@ -12,10 +12,10 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const location = useLocation();
 
   return isLoggedIn ? (
-    <>{children}</>
+    <> {children} </>
   ) : (
-    <Navigate to="/" state={{ from: location }} replace />
+    <Navigate to="/register" state={{ from: location }} replace />
   );
 };
 
-export default PrivateRoute;
+export default memo(PrivateRoute);

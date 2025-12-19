@@ -1,5 +1,4 @@
-import { FC } from "react";
-
+import { FC, memo } from "react";
 import TextType from "../components/UIComponents/TextTyping";
 import PadLayout from "../components/Layout/PadLayout";
 import CreateNewProjectCard from "../components/Cards/CreateNewProjectCard";
@@ -43,4 +42,4 @@ const DashBoardPage: FC = () => {
   );
 };
 
-export default DashBoardPage;
+export default memo(DashBoardPage);

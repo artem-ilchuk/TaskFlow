@@ -1,30 +1,29 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import clsx from "clsx";
 import { SpaceKeys, designTokens } from "./sizes";
 
 type Breakpoints = "sm" | "md" | "lg" | "xl";
 
-type LayerLayout = React.HTMLAttributes<HTMLDivElement> & {
+type LayerLayoutProps = React.HTMLAttributes<HTMLDivElement> & {
   gap?: SpaceKeys | Partial<Record<Breakpoints, SpaceKeys>>;
   className?: string;
   children: React.ReactNode;
 };
 
-export const LayerLayout: React.FC<LayerLayout> = ({
+export const LayerLayout: React.FC<LayerLayoutProps> = ({
   gap = "none",
   className,
   children,
   ...otherProps
-}: LayerLayout) => {
-  let gapClass = "";
-
-  if (typeof gap === "string") {
-    gapClass = designTokens.gapClasses[gap];
-  } else {
-    gapClass = Object.entries(gap)
+}) => {
+  const gapClass = useMemo(() => {
+    if (typeof gap === "string") {
+      return designTokens.gapClasses[gap];
+    }
+    return Object.entries(gap)
       .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
       .join(" ");
-  }
+  }, [gap]);
 
   return (
     <div
@@ -36,4 +35,4 @@ export const LayerLayout: React.FC<LayerLayout> = ({
   );
 };
 
-export default LayerLayout;
+export default memo(LayerLayout);

@@ -1,4 +1,5 @@
 import { ToggleswitchProps } from "../../types/common";
+import React, { memo } from "react";
 
 const Toggleswitch: React.FC<ToggleswitchProps> = ({ theme, toggleTheme }) => {
   return (
@@ -34,4 +35,4 @@ const Toggleswitch: React.FC<ToggleswitchProps> = ({ theme, toggleTheme }) => {
   );
 };
 
-export default Toggleswitch;
+export default memo(Toggleswitch);

@@ -1,10 +1,14 @@
 import Card from "../UIComponents/Card";
 import { NavLink } from "react-router-dom";
 import { FolderIcon } from "@heroicons/react/24/outline";
+import React, { memo } from "react";
 
 const MyprojectsCard: React.FC = () => {
   return (
-    <NavLink to="/projects" className=" text-left focus:outline-none ">
+    <NavLink
+      to="/dashboard/projects"
+      className=" text-left focus:outline-none "
+    >
       <Card
         className="
           h-50 w-70
@@ -36,4 +40,4 @@ const MyprojectsCard: React.FC = () => {
   );
 };
 
-export default MyprojectsCard;
+export default memo(MyprojectsCard);
