@@ -5,11 +5,15 @@ import React, { memo } from "react";
 
 const BenefitsList: React.FC<BenefitsListProps> = ({ text }) => {
   return (
-    <InlineLayout gap={"l"} align={"center"} justify={"center"}>
-      <div className="flex items-center justify-center bg-blue-500 w-6 h-6 rounded-full shrink-0 lg:w-24 lg:h-24 ">
-        <GiCheckMark className=" text-white w-2 h-2" />
+    <InlineLayout
+      gap={{ sm: "l", lg: "xl" }}
+      align={"center"}
+      justify={"center"}
+    >
+      <div className="flex items-center justify-center bg-blue-500 w-6 h-6 rounded-full shrink-0 lg:w-8 lg:h-8 ">
+        <GiCheckMark className=" text-white w-2 h-2 lg:w-4 lg:h-4" />
       </div>
-      <p className="max-w-78 whitespace-normal text-wrap text-sm lg:text-2xl">
+      <p className="max-w-78 whitespace-normal text-wrap text-sm lg:text-xl">
         {text}
       </p>
     </InlineLayout>

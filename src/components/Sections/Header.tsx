@@ -18,10 +18,10 @@ const Header: React.FC = () => {
   }, [navigate]);
 
   return (
-    <header className=" mx-auto ">
+    <header className=" max-w-[1440px]  mx-auto ">
       <PadLayout padding={"s"}>
         <InlineLayout justify="between">
-          <InlineLayout gap={"m"}>
+          <InlineLayout gap={{ sm: "m", lg: "xl" }}>
             <NavLink
               to="/"
               className="  cursor-pointer"
@@ -38,7 +38,7 @@ const Header: React.FC = () => {
               </span>
             </p>
           </InlineLayout>
-          <InlineLayout gap={"m"}>
+          <InlineLayout gap={{ sm: "l", lg: "xl" }}>
             <Toggleswitch theme={theme} toggleTheme={toggleTheme} />
             {!isLoggedIn ? (
               <button

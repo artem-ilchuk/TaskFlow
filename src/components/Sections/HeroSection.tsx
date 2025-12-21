@@ -11,8 +11,11 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="hero-section w-screen bg-no-repeat bg-center bg-cover">
-      <PadLayout padding={["m", "s", "m", "s"]} className="mx-auto">
+    <section className="hero-section  bg-no-repeat bg-center bg-cover">
+      <PadLayout
+        padding={["m", "s", "m", "s"]}
+        className="max-w-[1440px]  mx-auto"
+      >
         <div className="flex flex-col items-center">
           <h1
             className="text-5xl font-bold text-white text-center mx-auto max-w-xl wrap-break-word pb-4"

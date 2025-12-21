@@ -24,8 +24,11 @@ export const InlineLayout: React.FC<InlineProps> = ({
     if (typeof gap === "string") {
       return designTokens.gapClasses[gap];
     }
+
     return Object.entries(gap)
-      .map(([bp, val]) => `${bp}:${designTokens.gapClasses[val as SpaceKeys]}`)
+      .map(([bp, val]) => {
+        return designTokens.responsiveGaps[bp as Breakpoints][val as SpaceKeys];
+      })
       .join(" ");
   }, [gap]);
 
