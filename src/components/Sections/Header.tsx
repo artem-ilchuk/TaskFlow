@@ -18,8 +18,8 @@ const Header: React.FC = () => {
   }, [navigate]);
 
   return (
-    <header className=" max-w-[1440px]  mx-auto ">
-      <PadLayout padding={"s"}>
+    <header className=" max-w-360  mx-auto ">
+      <PadLayout padding={["s", "m", "s", "m"]}>
         <InlineLayout justify="between">
           <InlineLayout gap={{ sm: "m", lg: "xl" }}>
             <NavLink
@@ -38,7 +38,7 @@ const Header: React.FC = () => {
               </span>
             </p>
           </InlineLayout>
-          <InlineLayout gap={{ sm: "l", lg: "xl" }}>
+          <InlineLayout gap={{ sm: "l", lg: "xxl" }}>
             <Toggleswitch theme={theme} toggleTheme={toggleTheme} />
             {!isLoggedIn ? (
               <button
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
   btn btn-outline btn-accent 
   transition-all duration-300 ease-in-out
   btn-xs sm:px-8 py-4 md:btn-md lg:btn-lg xl:btn-xl
-  hover:scale-105
+  hover:scale-105 lg:ml-20
   "
                 onClick={handleRegistration}
               >

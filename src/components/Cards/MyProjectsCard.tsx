@@ -1,43 +1,61 @@
+import React, { memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { ProjectCardProps } from "../../types/project";
 import Card from "../UIComponents/Card";
-import { NavLink } from "react-router-dom";
-import { FolderIcon } from "@heroicons/react/24/outline";
-import React, { memo } from "react";
 
-const MyprojectsCard: React.FC = () => {
+const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps) => {
+  const { id, title = "Untitled", description, img } = props;
+  const navigate = useNavigate();
+
+  const handleClick = useCallback(() => {
+    navigate(`/dashboard/projects/${id}`);
+  }, [navigate, id]);
+
   return (
-    <NavLink
-      to="/dashboard/projects"
-      className=" text-left focus:outline-none "
-    >
+    <button onClick={handleClick} className="text-left focus:outline-none">
       <Card
         className="
           h-50 w-70
           rounded-xl
           bg-white
-          border border-green-300
+          border border-blue-300
           shadow-sm
           transition-all duration-200 ease-out
+          focus:outline-none cursor-pointer
           hover:-translate-y-1
           hover:shadow-lg
-          group
           flex flex-col items-center justify-center
+          group
         "
       >
         <Card.Body>
-          <div className="flex flex-col items-center justify-center h-40 gap-3 text-green-600">
-            <div className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-green-400 transition group-hover:border-green-600">
-              <FolderIcon className="w-7 h-7" />
+          <div className="flex flex-col items-center justify-center h-40 gap-3 text-gray-500">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-300 transition group-hover:border-blue-400 overflow-hidden">
+              {img ? (
+                <img
+                  src={img}
+                  alt={title}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                />
+              ) : (
+                <span className="text-xl font-bold text-blue-400">
+                  {title?.charAt(0).toUpperCase() || "?"}
+                </span>
+              )}
             </div>
-
-            <span className="font-medium">Go to My Projects</span>
-            <span className="text-sm text-green-400 text-center">
-              View and manage your existing projects
-            </span>
+            <div className="flex flex-col items-center">
+              <span className="font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
+                {title}
+              </span>
+              <span className="text-sm text-gray-400 text-center line-clamp-2 px-4">
+                {description || "No description provided"}
+              </span>
+            </div>
           </div>
         </Card.Body>
       </Card>
-    </NavLink>
+    </button>
   );
 };
 
-export default memo(MyprojectsCard);
+export default memo(ProjectCard);
