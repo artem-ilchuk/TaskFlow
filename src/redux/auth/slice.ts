@@ -8,7 +8,7 @@ import {
 import { AuthState, AuthResponse } from "../../types/userTypes";
 
 const initialState: AuthState = {
-  user: { name: null, email: null },
+  user: { id: null, name: null, email: null },
   token: null,
   isLoggedIn: false,
   isRefreshing: false,

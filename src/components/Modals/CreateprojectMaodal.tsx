@@ -1,42 +1,39 @@
 import { FC, memo, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import DatePicker from "react-datepicker";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "../Common/Modal";
 import CreateNewProjectCard from "../Cards/CreateNewProjectCard";
-import { useProjectOperations } from "../../hooks/useProjectOperations";
-
-import "react-datepicker/dist/react-datepicker.css";
-
-interface IProjectForm {
-  title: string;
-  description: string;
-  deadline: Date | null;
-}
+import { useProjectOperations } from "../../hooks/useProjectsApi";
+import { useSelector } from "react-redux";
+import { selectUserId } from "../../redux/auth/selectors";
+import { projectSchema, ProjectFormData } from "../../schemas/operationsSchema";
 
 const CreateProjectModule: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { createProject, isCreating } = useProjectOperations();
+  const userId = useSelector(selectUserId);
 
   const {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
-  } = useForm<IProjectForm>({
+  } = useForm<ProjectFormData>({
+    resolver: zodResolver(projectSchema),
     defaultValues: {
       title: "",
       description: "",
-      deadline: null,
     },
   });
 
-  const onSubmit = (data: IProjectForm) => {
+  const onSubmit = (data: ProjectFormData) => {
+    if (!userId) return;
+
     createProject(
       {
         title: data.title,
-        body: data.description,
-        userId: "6584f1e2c3a4b5d6e7f8g9h0",
+        body: data.description ?? "",
+        userId: userId,
       },
       {
         onSuccess: () => {
@@ -57,16 +54,13 @@ const CreateProjectModule: FC = () => {
         title="Create New Project"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Project Title */}
           <div className="form-control">
             <label className="label font-semibold text-gray-700">
               Project Title
             </label>
             <input
-              {...register("title", {
-                required: "Title is required",
-                minLength: { value: 3, message: "Minimum 3 characters" },
-              })}
+              {...register("title")}
+              type="text"
               className={`input input-bordered border-blue-200 focus:border-blue-500 w-full ${
                 errors.title ? "input-error" : ""
               }`}
@@ -78,44 +72,25 @@ const CreateProjectModule: FC = () => {
               </span>
             )}
           </div>
-          <div className="form-control">
-            <label className="label font-semibold text-gray-700">
-              Deadline
-            </label>
-            <Controller
-              control={control}
-              name="deadline"
-              rules={{ required: "Deadline is required" }}
-              render={({ field }) => (
-                <DatePicker
-                  placeholderText="Select project deadline"
-                  onChange={(date) => field.onChange(date)}
-                  selected={field.value}
-                  dateFormat="dd.MM.yyyy"
-                  minDate={new Date()}
-                  className={`input input-bordered border-blue-200 focus:border-blue-500 w-full ${
-                    errors.deadline ? "input-error" : ""
-                  }`}
-                  wrapperClassName="w-full"
-                />
-              )}
-            />
-            {errors.deadline && (
-              <span className="text-error text-xs mt-1">
-                {errors.deadline.message}
-              </span>
-            )}
-          </div>
+
           <div className="form-control">
             <label className="label font-semibold text-gray-700">
               Description
             </label>
             <textarea
               {...register("description")}
-              className="textarea textarea-bordered border-blue-200 focus:border-blue-500 h-24"
+              className={`textarea textarea-bordered border-blue-200 focus:border-blue-500 h-32 resize-none ${
+                errors.description ? "textarea-error" : ""
+              }`}
               placeholder="Describe what needs to be done..."
             />
+            {errors.description && (
+              <span className="text-error text-xs mt-1">
+                {errors.description.message}
+              </span>
+            )}
           </div>
+
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"

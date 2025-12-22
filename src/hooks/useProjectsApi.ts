@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { ApiRequest, IProject, IProjectPayload } from "../api/api";
+import { ApiRequest, IProjectPayload } from "../api/api";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

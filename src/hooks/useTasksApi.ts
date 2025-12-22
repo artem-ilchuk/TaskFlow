@@ -1,38 +1,43 @@
-import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApiRequest, ICreateTaskPayload, ITask } from "../api/api";
+import toast from "react-hot-toast";
 
-export interface ITask {
-  id: string;
-  projectId: string;
-  title: string;
-  completed: boolean;
-}
+export const useTaskOperations = (projectId: string) => {
+  const queryClient = useQueryClient();
+  const tasksQueryKey = ["projects", projectId, "tasks"];
 
-export type ITaskPayload = Omit<ITask, "id">;
+  const { mutate: createTask, isPending: isCreating } = useMutation({
+    mutationFn: (payload: ICreateTaskPayload) => ApiRequest.createTask(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey });
+      toast.success("Task added!");
+    },
+    onError: (error: Error) =>
+      toast.error(error.message || "Failed to add task"),
+  });
 
-class ApiRequests {
-  private BASE_URL = "https://server-task-flow-kpu2.onrender.com";
+  const { mutate: deleteTask, isPending: isDeleting } = useMutation({
+    mutationFn: (taskId: string) => ApiRequest.deleteTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey });
+      toast.success("Task deleted");
+    },
+  });
 
-  getTasksByProject(projectId: string) {
-    return axios
-      .get<ITask[]>(`${this.BASE_URL}/projects/${projectId}/tasks`)
-      .then((res) => res.data);
-  }
+  const { mutate: updateTask, isPending: isUpdating } = useMutation({
+    mutationFn: ({ taskId, data }: { taskId: string; data: Partial<ITask> }) =>
+      ApiRequest.updateTask(taskId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey });
+    },
+  });
 
-  createTask(payload: ITaskPayload) {
-    return axios
-      .post<ITask>(`${this.BASE_URL}/tasks`, payload)
-      .then((res) => res.data);
-  }
-
-  updateTask(id: string, data: Partial<ITask>) {
-    return axios
-      .patch<ITask>(`${this.BASE_URL}/tasks/${id}`, data)
-      .then((res) => res.data);
-  }
-
-  deleteTask(id: string) {
-    return axios.delete(`${this.BASE_URL}/tasks/${id}`).then((res) => res.data);
-  }
-}
-
-export const ApiRequest = new ApiRequests();
+  return {
+    createTask,
+    isCreating,
+    deleteTask,
+    isDeleting,
+    updateTask,
+    isUpdating,
+  };
+};

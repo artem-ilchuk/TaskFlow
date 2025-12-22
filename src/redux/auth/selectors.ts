@@ -4,6 +4,7 @@ import { RootState } from "../store";
 const selectAuth = (state: RootState) => state.auth;
 
 export const selectUser = createSelector([selectAuth], (auth) => auth.user);
+export const selectUserId = createSelector([selectUser], (user) => user?.id);
 export const selectIsLoggedIn = createSelector(
   [selectAuth],
   (auth) => auth.isLoggedIn
