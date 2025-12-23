@@ -32,8 +32,7 @@ const CreateProjectModule: FC = () => {
     createProject(
       {
         title: data.title,
-        body: data.description ?? "",
-        userId: userId,
+        description: data.description ?? "",
       },
       {
         onSuccess: () => {
@@ -101,7 +100,7 @@ const CreateProjectModule: FC = () => {
             </button>
             <button
               type="submit"
-              className="btn btn-primary bg-blue-500 hover:bg-blue-600 border-none px-8"
+              className="btn btn-primary bg-blue-500 hover:bg-blue-600 border-none px-8 text-white"
               disabled={isCreating}
             >
               {isCreating ? (

@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction, isAnyOf } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import {
   loginThunk,
   refreshUserThunk,
   registerThunk,
   logoutThunk,
 } from "./operations";
-import { AuthState, AuthResponse } from "../../types/userTypes";
+import { AuthState } from "../../types/userTypes";
 
 const initialState: AuthState = {
   user: { id: null, name: null, email: null },
@@ -29,13 +29,23 @@ const authSlice = createSlice({
       })
       .addCase(refreshUserThunk.pending, (state) => {
         state.isRefreshing = true;
-      })
-      .addCase(refreshUserThunk.fulfilled, (state, { payload }) => {
-        if (payload.accessToken) {
-          state.token = payload.accessToken;
-        }
-        state.user = payload.user;
+        state.isAuthLoading = true;
         state.isLoggedIn = true;
+      })
+      .addCase(refreshUserThunk.fulfilled, (state, { payload }: any) => {
+        const userData = payload?.data?.user || payload?.user;
+
+        if (userData) {
+          state.user = {
+            id: userData._id || userData.id,
+            name: userData.name,
+            email: userData.email,
+          };
+          state.token =
+            payload?.data?.accessToken || payload?.accessToken || state.token;
+          state.isLoggedIn = true;
+        }
+
         state.isRefreshing = false;
         state.isAuthLoading = false;
       })
@@ -43,18 +53,27 @@ const authSlice = createSlice({
         state.isRefreshing = false;
         state.isAuthLoading = false;
         state.token = null;
+        state.isLoggedIn = false;
       })
-      .addCase(logoutThunk.fulfilled, (state) => {
+      .addCase(logoutThunk.fulfilled, () => {
         return initialState;
       })
       .addMatcher(
         isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled),
-        (state, action: PayloadAction<AuthResponse>) => {
-          const { user, accessToken, refreshToken } = action.payload;
-          state.user = user;
-          state.token = accessToken;
-          state.refreshToken = refreshToken;
-          state.isLoggedIn = true;
+        (state, action: any) => {
+          const responseData = action.payload?.data || action.payload;
+
+          if (responseData?.user) {
+            state.user = {
+              id: responseData.user._id || responseData.user.id,
+              name: responseData.user.name,
+              email: responseData.user.email,
+            };
+            state.token = responseData.accessToken;
+            state.refreshToken = responseData.refreshToken;
+            state.isLoggedIn = true;
+          }
+
           state.isAuthLoading = false;
           state.isRegistering = false;
           state.isAuthError = null;

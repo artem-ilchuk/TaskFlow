@@ -1,7 +1,11 @@
 import React, { ReactNode, memo } from "react";
 import { useSelector } from "react-redux";
-import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+} from "../../redux/auth/selectors";
 import { Navigate } from "react-router-dom";
+import Loader from "../Common/Loader";
 
 interface PublicRouteProps {
   children: ReactNode;
@@ -9,8 +13,13 @@ interface PublicRouteProps {
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
-  return isLoggedIn ? <Navigate to="/dashboard" replace /> : <> {children} </>;
+  if (isRefreshing) {
+    return <Loader />;
+  }
+
+  return isLoggedIn ? <Navigate to="/dashboard" replace /> : <>{children}</>;
 };
 
 export default memo(PublicRoute);

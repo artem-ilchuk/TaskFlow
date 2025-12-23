@@ -13,6 +13,7 @@ type CardProps = {
 
 type SectionProps = {
   children?: React.ReactNode;
+  className?: string;
 };
 
 const CardContext = createContext<CardContextType | null>(null);

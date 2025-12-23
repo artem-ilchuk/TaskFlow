@@ -1,10 +1,18 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ApiRequest, ICreateTaskPayload, ITask } from "../api/api";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { ApiRequest } from "../api/api";
+import { ICreateTaskPayload, ITask } from "../types/operations";
 
 export const useTaskOperations = (projectId: string) => {
   const queryClient = useQueryClient();
+
   const tasksQueryKey = ["projects", projectId, "tasks"];
+
+  const { data: tasks = [], isLoading } = useQuery({
+    queryKey: tasksQueryKey,
+    queryFn: () => ApiRequest.getTasksByProjectId(projectId),
+    enabled: !!projectId,
+  });
 
   const { mutate: createTask, isPending: isCreating } = useMutation({
     mutationFn: (payload: ICreateTaskPayload) => ApiRequest.createTask(payload),
@@ -33,6 +41,8 @@ export const useTaskOperations = (projectId: string) => {
   });
 
   return {
+    tasks,
+    isLoading,
     createTask,
     isCreating,
     deleteTask,

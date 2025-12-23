@@ -1,54 +1,51 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "./instance";
+import * as Ops from "../types/operations";
 
-export interface IProject {
-  userId: string;
-  id: string;
-  title: string;
-  body: string;
-}
-
-export interface ITask {
-  id: string;
-  projectId: string;
-  title: string;
-  description?: string;
-}
-
-export interface IProjectPayload {
-  title: string;
-  body: string;
-  userId: string;
-}
-
-export interface ICreateTaskPayload {
-  projectId: string;
-  title: string;
-  description?: string;
+interface ApiResponse<T> {
+  status: number;
+  message: string;
+  data: T;
 }
 
 class ApiRequests {
-  private readonly BASE_URL: string =
-    "https://server-task-flow-kpu2.onrender.com";
+  private handleResponse<T>(response: AxiosResponse<ApiResponse<T>>): T {
+    const rawData = response.data?.data;
 
-  private handleResponse<T>(response: AxiosResponse<T>): T {
-    return response.data;
+    if (!rawData) return (Array.isArray(rawData) ? [] : {}) as unknown as T;
+
+    if (Array.isArray(rawData)) {
+      return rawData.map((item: any) => ({
+        ...item,
+        id: item._id || item.id,
+      })) as unknown as T;
+    }
+
+    if (typeof rawData === "object") {
+      return {
+        ...rawData,
+        id: (rawData as any)._id || (rawData as any).id,
+      } as T;
+    }
+
+    return rawData;
   }
 
-  public async getProjects(): Promise<IProject[]> {
-    const response = await axios.get<IProject[]>(`${this.BASE_URL}/projects`);
+  public async getProjects(): Promise<Ops.IProject[]> {
+    const response = await api.get<ApiResponse<Ops.IProject[]>>("/projects");
     return this.handleResponse(response);
   }
 
-  public async getProjectById(id: string): Promise<IProject> {
-    const response = await axios.get<IProject>(
-      `${this.BASE_URL}/projects/${id}`
+  public async getProjectById(id: string): Promise<Ops.IProject> {
+    const response = await api.get<ApiResponse<Ops.IProject>>(
+      `/projects/${id}`
     );
     return this.handleResponse(response);
   }
 
-  public async createProject(data: IProjectPayload): Promise<IProject> {
-    const response = await axios.post<IProject>(
-      `${this.BASE_URL}/projects`,
+  public async createProject(data: Ops.IProjectPayload): Promise<Ops.IProject> {
+    const response = await api.post<ApiResponse<Ops.IProject>>(
+      "/projects",
       data
     );
     return this.handleResponse(response);
@@ -56,44 +53,47 @@ class ApiRequests {
 
   public async updateProject(
     projectId: string,
-    data: Partial<IProjectPayload>
-  ): Promise<IProject> {
-    const response = await axios.patch<IProject>(
-      `${this.BASE_URL}/projects/${projectId}`,
+    data: Partial<Ops.IProjectPayload>
+  ): Promise<Ops.IProject> {
+    const response = await api.patch<ApiResponse<Ops.IProject>>(
+      `/projects/${projectId}`,
       data
     );
     return this.handleResponse(response);
   }
 
   public async deleteProject(id: string): Promise<void> {
-    await axios.delete(`${this.BASE_URL}/projects/${id}`);
+    await api.delete(`/projects/${id}`);
   }
 
-  public async getTasksByProjectId(projectId: string): Promise<ITask[]> {
-    const response = await axios.get<ITask[]>(
-      `${this.BASE_URL}/projects/${projectId}/tasks`
+  public async getTasksByProjectId(projectId: string): Promise<Ops.ITask[]> {
+    const response = await api.get<ApiResponse<Ops.ITask[]>>(
+      `/tasks/project/${projectId}`
     );
     return this.handleResponse(response);
   }
 
-  public async createTask(payload: ICreateTaskPayload): Promise<ITask> {
-    const response = await axios.post<ITask>(`${this.BASE_URL}/tasks`, payload);
+  public async createTask(payload: Ops.ICreateTaskPayload): Promise<Ops.ITask> {
+    const response = await api.post<ApiResponse<Ops.ITask>>("/tasks", payload);
     return this.handleResponse(response);
   }
 
   public async updateTask(
     taskId: string,
-    data: Partial<ITask>
-  ): Promise<ITask> {
-    const response = await axios.patch<ITask>(
-      `${this.BASE_URL}/tasks/${taskId}`,
-      data
+    data: Partial<Ops.ITask>
+  ): Promise<Ops.ITask> {
+    const { id, _id, ownerId, projectId, createdAt, updatedAt, ...payload } =
+      data as any;
+
+    const response = await api.patch<ApiResponse<Ops.ITask>>(
+      `/tasks/${taskId}`,
+      payload
     );
     return this.handleResponse(response);
   }
 
   public async deleteTask(taskId: string): Promise<void> {
-    await axios.delete(`${this.BASE_URL}/tasks/${taskId}`);
+    await api.delete(`/tasks/${taskId}`);
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProjectCardProps } from "../../types/project";
+import { ProjectCardProps } from "../../types/operations";
 import Card from "../UIComponents/Card";
 
 const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps) => {

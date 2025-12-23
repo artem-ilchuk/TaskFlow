@@ -7,7 +7,7 @@ import PadLayout from "../../Layout/PadLayout";
 
 const Benefits: React.FC = () => {
   return (
-    <section className="benefits bg-white">
+    <section className="benefits bg-bg transition-colors duration-500">
       <PadLayout padding={["l", "s", "l", "s"]}>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-20 lg:gap-16 xl:gap-24 max-w-7xl mx-auto">
           <ul
@@ -33,16 +33,16 @@ const Benefits: React.FC = () => {
               font-[1000] mb-12 lg:mb-20
               text-3xl lg:text-5xl xl:text-6xl 
               leading-[0.8] uppercase tracking-[-0.07em]
-              text-neutral-800 flex flex-col gap-1
+              text-text flex flex-col gap-1
             "
             >
               <span className="block">Customer</span>
 
-              <span className="block lg:ml-12 xl:ml-20 text-blue-900 italic lowercase font-black tracking-normal leading-none">
+              <span className="block lg:ml-12 xl:ml-20 text-primary italic lowercase font-black tracking-normal leading-none">
                 satisfaction
               </span>
 
-              <span className="block lg:ml-24 xl:ml-40 underline decoration-4 decoration-blue-900/20 underline-offset-8">
+              <span className="block lg:ml-24 xl:ml-40 underline decoration-4 decoration-primary/20 underline-offset-8">
                 is priority
               </span>
             </h2>
@@ -50,7 +50,7 @@ const Benefits: React.FC = () => {
             <div className="lg:pl-10 flex flex-col gap-12">
               <p
                 className="
-                text-neutral-600 font-bold
+                text-text opacity-70 font-bold
                 text-lg xl:text-2xl 
                 leading-[1.3] tracking-tight max-w-md
               "

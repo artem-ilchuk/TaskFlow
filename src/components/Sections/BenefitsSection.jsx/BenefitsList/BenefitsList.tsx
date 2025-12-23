@@ -10,10 +10,10 @@ const BenefitsList: React.FC<BenefitsListProps> = ({ text }) => {
       align={"center"}
       justify={"center"}
     >
-      <div className="flex items-center justify-center bg-blue-500 w-6 h-6 rounded-full shrink-0 lg:w-8 lg:h-8 ">
-        <GiCheckMark className=" text-white w-2 h-2 lg:w-4 lg:h-4" />
+      <div className="flex items-center justify-center bg-blue-500 w-6 h-6 rounded-full shrink-0 lg:w-8 lg:h-8 cursor-default">
+        <GiCheckMark className="text-white w-2 h-2 lg:w-4 lg:h-4" />
       </div>
-      <p className="max-w-78 whitespace-normal text-wrap text-sm lg:text-xl">
+      <p className="max-w-78 whitespace-normal text-wrap text-sm lg:text-xl cursor-default select-none text-text">
         {text}
       </p>
     </InlineLayout>
