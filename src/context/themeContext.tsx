@@ -1,10 +1,10 @@
 import {
   createContext,
   useContext,
-  useEffect,
-  ReactNode,
   useCallback,
   useMemo,
+  useLayoutEffect,
+  ReactNode,
 } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Theme, ThemeContextType } from "../types/common";
@@ -22,8 +22,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }, [setTheme]);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+  useLayoutEffect(() => {
+    const root = window.document.documentElement;
+    root.setAttribute("data-theme", theme);
+
+    root.style.colorScheme = theme;
   }, [theme]);
 
   const value = useMemo(
@@ -40,10 +43,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 }
 
-export function useTheme(): ThemeContextType {
+export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-}
+};

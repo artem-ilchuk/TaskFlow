@@ -3,6 +3,18 @@ import api from "./instance";
 import * as Ops from "../types/operations";
 import { IUser } from "../types/userTypes";
 
+export interface INotification {
+  id: string;
+  message: string;
+  createdAt: string;
+}
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  nextCursor?: string;
+}
+
 interface ApiResponse<T> {
   status: number;
   message: string;
@@ -37,6 +49,27 @@ class ApiRequests {
   public async getProjects(): Promise<Ops.IProject[]> {
     const response = await api.get<ApiResponse<Ops.IProject[]>>("/projects");
     return this.handleResponse(response);
+  }
+
+  public async getProjectsPaginated(
+    limit: number = 20,
+    cursor?: string
+  ): Promise<PaginatedResponse<Ops.IProject>> {
+    const response = await api.get<
+      ApiResponse<{
+        projects: Ops.IProject[];
+        total: number;
+        nextCursor?: string;
+      }>
+    >("/projects", { params: { limit, cursor } });
+
+    const mappedData = this.handleResponse(response);
+
+    return {
+      items: (mappedData as any).projects,
+      total: (mappedData as any).total,
+      nextCursor: (mappedData as any).nextCursor,
+    };
   }
 
   public async getProjectById(id: string): Promise<Ops.IProject> {
@@ -87,6 +120,7 @@ class ApiRequests {
   ): Promise<Ops.ITask> {
     const { id, _id, ownerId, projectId, createdAt, updatedAt, ...payload } =
       data as any;
+
     const response = await api.patch<ApiResponse<Ops.ITask>>(
       `/tasks/${taskId}`,
       payload
@@ -101,6 +135,19 @@ class ApiRequests {
   public async getUsers(): Promise<IUser[]> {
     const response = await api.get<ApiResponse<IUser[]>>("/members/all");
     return this.handleResponse(response);
+  }
+
+  public async getCurrentUser(): Promise<IUser> {
+    const response = await api.get<ApiResponse<IUser>>("/auth/me");
+    return this.handleResponse(response);
+  }
+
+  public async getLatestNotification(): Promise<INotification | null> {
+    const response = await api.get<ApiResponse<INotification>>(
+      "/notifications/latest"
+    );
+    const data = this.handleResponse(response);
+    return data && (data as any).id ? data : null;
   }
 }
 

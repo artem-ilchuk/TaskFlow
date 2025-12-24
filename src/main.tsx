@@ -12,6 +12,7 @@ import "modern-normalize";
 import App from "./App";
 import { persistor, store } from "./redux/store";
 import { ThemeProvider } from "./context/themeContext";
+import { NotificationProvider } from "./context/notificationContext";
 import ErrorBoundaryFallback from "./components/Common/ErrorBoundary";
 
 const queryClient = new QueryClient();
@@ -25,7 +26,9 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <BrowserRouter>
               <Toaster position="top-right" />
               <ThemeProvider>
-                <App />
+                <NotificationProvider>
+                  <App />
+                </NotificationProvider>
               </ThemeProvider>
               <ReactQueryDevtools initialIsOpen={false} />
             </BrowserRouter>

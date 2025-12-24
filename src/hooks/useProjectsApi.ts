@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ApiRequest } from "../api/api";
 import { toast } from "react-hot-toast";
 import { RootState } from "../redux/store";
-import { IProjectPayload } from "../types/operations";
+import { IProjectPayload, IProject } from "../types/operations";
 
 export const useProjectOperations = () => {
   const queryClient = useQueryClient();
@@ -19,16 +19,31 @@ export const useProjectOperations = () => {
   });
 
   const createProjectMutation = useMutation({
-    mutationFn: async (payload: Omit<IProjectPayload, "ownerId">) => {
+    mutationFn: async (
+      payload: Omit<IProjectPayload, "ownerId">
+    ): Promise<IProject> => {
       const actualId = user?.id || (user as any)?._id;
-      if (!actualId) throw new Error("User ID is missing");
-      return ApiRequest.createProject({ ...payload, ownerId: actualId });
+      if (!actualId) throw new Error("User ID is missing. Please re-login.");
+
+      const finalData: IProjectPayload = {
+        title: payload.title,
+        description: payload.description,
+        ownerId: actualId,
+      };
+
+      return ApiRequest.createProject(finalData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-      toast.success("Project created!");
+      toast.success("Project created successfully!");
     },
-    onError: () => toast.error("Failed to create project"),
+    onError: (error: any) => {
+      const msg =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to create project";
+      toast.error(msg);
+    },
   });
 
   const updateProjectMutation = useMutation({
@@ -60,11 +75,12 @@ export const useProjectOperations = () => {
   return {
     projects: projectsQuery.data ?? [],
     isLoading: projectsQuery.isLoading,
-    createProject: createProjectMutation.mutate,
+
+    createProject: createProjectMutation.mutateAsync,
     isCreating: createProjectMutation.isPending,
-    updateProject: updateProjectMutation.mutate,
+    updateProject: updateProjectMutation.mutateAsync,
     isUpdating: updateProjectMutation.isPending,
-    deleteProject: deleteProjectMutation.mutate,
+    deleteProject: deleteProjectMutation.mutateAsync,
     isDeleting: deleteProjectMutation.isPending,
   };
 };

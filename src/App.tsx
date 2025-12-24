@@ -1,10 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsRefreshing } from "./redux/auth/selectors";
 import { refreshUserThunk } from "./redux/auth/operations";
-
 import Loader from "./components/Common/Loader";
 import PublicRoute from "./components/Routes/PublicRoute";
 import PrivateRoute from "./components/Routes/PrivateRoute";
@@ -31,9 +29,11 @@ const App: React.FC = () => {
     dispatch(refreshUserThunk());
   }, [dispatch]);
 
-  return isRefreshing ? (
-    <Loader />
-  ) : (
+  if (isRefreshing) {
+    return <Loader />;
+  }
+
+  return (
     <Suspense fallback={<Loader />}>
       <Routes>
         <Route element={<PageLayout />}>

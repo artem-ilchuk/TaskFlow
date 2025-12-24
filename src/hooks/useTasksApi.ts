@@ -49,23 +49,18 @@ export const useTaskOperations = (projectId: string) => {
       taskId: string;
       data: Partial<Ops.ITask>;
     }) => ApiRequest.updateTask(taskId, data),
-
     onMutate: async ({ taskId, data }) => {
       await queryClient.cancelQueries({ queryKey: tasksQueryKey });
-
       const previousTasks =
         queryClient.getQueryData<Ops.ITask[]>(tasksQueryKey);
-
       queryClient.setQueryData<Ops.ITask[]>(tasksQueryKey, (old) => {
         if (!old) return [];
         return old.map((task) =>
           task.id === taskId ? { ...task, ...data } : task
         );
       });
-
       return { previousTasks };
     },
-
     onError: (error: any, _variables, context) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(tasksQueryKey, context.previousTasks);
@@ -76,7 +71,6 @@ export const useTaskOperations = (projectId: string) => {
           "Failed to update task"
       );
     },
-
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey });
     },

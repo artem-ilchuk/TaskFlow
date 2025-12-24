@@ -4,7 +4,7 @@ import {
   selectIsLoggedIn,
   selectIsRefreshing,
 } from "../../redux/auth/selectors";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import Loader from "../Common/Loader";
 
 interface PublicRouteProps {
@@ -14,12 +14,18 @@ interface PublicRouteProps {
 const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const isRefreshing = useSelector(selectIsRefreshing);
+  const location = useLocation();
 
   if (isRefreshing) {
     return <Loader />;
   }
 
-  return isLoggedIn ? <Navigate to="/dashboard" replace /> : <>{children}</>;
+  if (isLoggedIn) {
+    const from = location.state?.from?.pathname || "/dashboard";
+    return <Navigate to={from} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default memo(PublicRoute);

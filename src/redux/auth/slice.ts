@@ -11,7 +11,7 @@ const initialState: AuthState = {
   user: { id: null, name: null, email: null },
   token: null,
   isLoggedIn: false,
-  isRefreshing: false,
+  isRefreshing: true,
   isAuthLoading: false,
   isAuthError: null,
   isRegistering: false,
@@ -26,7 +26,6 @@ const authSlice = createSlice({
     builder
       .addCase(refreshUserThunk.pending, (state) => {
         state.isRefreshing = true;
-        state.isAuthLoading = true;
       })
       .addCase(refreshUserThunk.fulfilled, (state, { payload }: any) => {
         const userData = payload?.data || payload;
@@ -40,17 +39,15 @@ const authSlice = createSlice({
           state.isLoggedIn = true;
         }
         state.isRefreshing = false;
-        state.isAuthLoading = false;
       })
       .addCase(refreshUserThunk.rejected, (state) => {
         state.user = { id: null, name: null, email: null };
         state.token = null;
         state.isLoggedIn = false;
         state.isRefreshing = false;
-        state.isAuthLoading = false;
       })
       .addCase(logoutThunk.fulfilled, () => {
-        return initialState;
+        return { ...initialState, isRefreshing: false };
       })
       .addMatcher(
         isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled),
@@ -67,12 +64,14 @@ const authSlice = createSlice({
             state.isLoggedIn = true;
           }
           state.isAuthLoading = false;
+          state.isRefreshing = false;
         }
       )
       .addMatcher(
         isAnyOf(registerThunk.rejected, loginThunk.rejected),
         (state, { payload }) => {
           state.isAuthLoading = false;
+          state.isRefreshing = false;
           state.isAuthError = typeof payload === "string" ? payload : "Error";
         }
       );
