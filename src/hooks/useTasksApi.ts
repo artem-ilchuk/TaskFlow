@@ -5,7 +5,6 @@ import { ICreateTaskPayload, ITask } from "../types/operations";
 
 export const useTaskOperations = (projectId: string) => {
   const queryClient = useQueryClient();
-
   const tasksQueryKey = ["projects", projectId, "tasks"];
 
   const { data: tasks = [], isLoading } = useQuery({
@@ -30,12 +29,37 @@ export const useTaskOperations = (projectId: string) => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey });
       toast.success("Task deleted");
     },
+    onError: (error: Error) =>
+      toast.error(error.message || "Failed to delete task"),
   });
 
   const { mutate: updateTask, isPending: isUpdating } = useMutation({
     mutationFn: ({ taskId, data }: { taskId: string; data: Partial<ITask> }) =>
       ApiRequest.updateTask(taskId, data),
-    onSuccess: () => {
+
+    onMutate: async ({ taskId, data }) => {
+      await queryClient.cancelQueries({ queryKey: tasksQueryKey });
+
+      const previousTasks = queryClient.getQueryData<ITask[]>(tasksQueryKey);
+
+      queryClient.setQueryData<ITask[]>(tasksQueryKey, (old) => {
+        if (!old) return [];
+        return old.map((task) =>
+          task.id === taskId ? { ...task, ...data } : task
+        );
+      });
+
+      return { previousTasks };
+    },
+
+    onError: (error: Error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(tasksQueryKey, context.previousTasks);
+      }
+      toast.error(error.message || "Failed to update task");
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey });
     },
   });

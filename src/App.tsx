@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -18,21 +18,22 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const DashBoardPage = lazy(() => import("./pages/DashBoardPage"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
-const ProjectsDetailsPage = lazy(() => import("./pages/ProjectsDetailsPage"));
+const ProjectDetailsPage = lazy(() => import("./pages/ProjectDetailsPage"));
 const TasksDetailsPage = lazy(() => import("./pages/TasksDetailsPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
     dispatch(refreshUserThunk());
   }, [dispatch]);
 
-  return isRefreshing ? null : (
+  return isRefreshing ? (
+    <Loader />
+  ) : (
     <Suspense fallback={<Loader />}>
       <Routes>
         <Route element={<PageLayout />}>
@@ -73,7 +74,7 @@ const App: React.FC = () => {
         >
           <Route index element={<DashBoardPage />} />
           <Route path="projects" element={<ProjectsPage />} />
-          <Route path="projects/:projectId" element={<ProjectsDetailsPage />} />
+          <Route path="projects/:projectId" element={<ProjectDetailsPage />} />
           <Route path="tasks/:id" element={<TasksDetailsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="profile" element={<ProfilePage />} />

@@ -3,7 +3,7 @@ import React, { memo } from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="w-full bg-neutral text-neutral-content transition-colors duration-500">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-10 flex flex-col items-center gap-6 lg:flex-row lg:justify-center lg:gap-200">
+      <div className="max-w-360 mx-auto px-4 md:px-8 py-10 flex flex-col items-center gap-6 lg:flex-row lg:justify-center lg:gap-200">
         <aside>
           <svg
             width="50"

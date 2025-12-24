@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import { ApiRequest, IProjectPayload } from "../api/api";
+import { ApiRequest } from "../api/api";
 import { toast } from "react-hot-toast";
 import { RootState } from "../redux/store";
+import { IProjectPayload } from "../types/operations";
 
 export const useProjectOperations = () => {
   const queryClient = useQueryClient();

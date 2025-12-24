@@ -1,33 +1,42 @@
-export type TaskStatus = "TO DO" | "IN PROGRESS" | "ON REVIEW" | "DONE";
+import { IUser } from "./userTypes";
 
-export const KANBAN_COLUMNS: { id: TaskStatus; title: string }[] = [
-  { id: "TO DO", title: "To Do" },
-  { id: "IN PROGRESS", title: "In Progress" },
-  { id: "ON REVIEW", title: "On Review" },
-  { id: "DONE", title: "Done" },
-];
+export type Priority = "low" | "medium" | "high";
 
-export interface IProject {
-  id: string;
-  ownerId: string;
-  title: string;
-  description: string;
-  deadline?: string | null;
-  img?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-}
+export const KANBAN_COLUMNS = [
+  { id: "To Do", title: "To Do" },
+  { id: "In Progress", title: "In Progress" },
+  { id: "Review", title: "Review" },
+  { id: "Done", title: "Done" },
+] as const;
+
+export type TaskStatus = (typeof KANBAN_COLUMNS)[number]["id"];
 
 export interface ITask {
   id: string;
+  _id?: string;
   projectId: string;
   ownerId: string;
   title: string;
   description: string;
   status: TaskStatus;
-  deadline?: string | null;
-  createdAt: string;
-  updatedAt: string;
+  deadline?: string | Date | null;
+  assignedTo: IUser | null;
+  priority?: Priority;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IProject {
+  id: string;
+  _id?: string;
+  ownerId: string;
+  title: string;
+  description: string;
+  deadline?: string | Date | null;
+  img?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IProjectPayload {
@@ -41,6 +50,9 @@ export interface ICreateTaskPayload {
   title: string;
   description?: string;
   status: TaskStatus;
+  deadline?: string | Date | null;
+  assignedTo?: string | null;
+  priority: Priority;
 }
 
 export interface ProjectCardProps {
@@ -48,8 +60,8 @@ export interface ProjectCardProps {
   title: string;
   description?: string;
   status?: string;
-  deadline?: string;
-  img?: string;
+  deadline?: string | Date | null;
+  img?: string | null;
 }
 
 export interface TaskCardProps {

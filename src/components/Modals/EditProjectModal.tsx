@@ -1,7 +1,12 @@
-import { FC } from "react";
+import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "../Common/Modal";
 import { useProjectOperations } from "../../hooks/useProjectsApi";
+import {
+  updateProjectSchema,
+  UpdateProjectFormData,
+} from "../../schemas/operationsSchema";
 
 interface EditProjectModalProps {
   isOpen: boolean;
@@ -20,20 +25,35 @@ const EditProjectModal: FC<EditProjectModalProps> = ({
 }) => {
   const { updateProject, isUpdating } = useProjectOperations();
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UpdateProjectFormData>({
+    resolver: zodResolver(updateProjectSchema),
     defaultValues: {
       title: project.title,
       description: project.description,
     },
   });
 
-  const onSubmit = (data: { title: string; description: string }) => {
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        title: project.title,
+        description: project.description,
+      });
+    }
+  }, [isOpen, project, reset]);
+
+  const onSubmit = (data: UpdateProjectFormData) => {
     updateProject(
       {
         id: project.id,
         data: {
           title: data.title,
-          description: data.description,
+          description: data.description ?? "",
         },
       },
       {
@@ -52,10 +72,17 @@ const EditProjectModal: FC<EditProjectModalProps> = ({
             Project Title
           </label>
           <input
-            {...register("title", { required: true })}
+            {...register("title")}
             placeholder="Enter project title"
-            className="input input-bordered focus:border-blue-500 w-full"
+            className={`input input-bordered focus:border-blue-500 w-full ${
+              errors.title ? "input-error" : ""
+            }`}
           />
+          {errors.title && (
+            <span className="text-error text-xs mt-1">
+              {errors.title.message}
+            </span>
+          )}
         </div>
 
         <div className="form-control">
@@ -65,8 +92,15 @@ const EditProjectModal: FC<EditProjectModalProps> = ({
           <textarea
             {...register("description")}
             placeholder="Enter project description"
-            className="textarea textarea-bordered h-32 focus:border-blue-500 resize-none"
+            className={`textarea textarea-bordered h-32 focus:border-blue-500 resize-none ${
+              errors.description ? "textarea-error" : ""
+            }`}
           />
+          {errors.description && (
+            <span className="text-error text-xs mt-1">
+              {errors.description.message}
+            </span>
+          )}
         </div>
 
         <div className="modal-action flex gap-3">
@@ -94,4 +128,4 @@ const EditProjectModal: FC<EditProjectModalProps> = ({
   );
 };
 
-export default EditProjectModal;
+export default memo(EditProjectModal);

@@ -1,7 +1,10 @@
 import Card from "../UIComponents/Card";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { CreateNewProjectCardProps } from "../../types/operations";
 import React, { memo } from "react";
+
+interface CreateNewProjectCardProps {
+  onClick: () => void;
+}
 
 const CreateNewProjectCard: React.FC<CreateNewProjectCardProps> = ({
   onClick,

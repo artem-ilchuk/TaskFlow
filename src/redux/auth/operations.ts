@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import type { RootState } from "../store";
@@ -10,6 +10,10 @@ import {
   RegisterCredentials,
   User,
 } from "../../types/userTypes";
+
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 export const taskFlowAPI = axios.create({
   baseURL: "https://server-task-flow-kpu2.onrender.com",
@@ -27,27 +31,33 @@ export const resetAuthHeader = (): void => {
 taskFlowAPI.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as CustomAxiosRequestConfig;
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest?.url === "/users/current"
+    ) {
+      return Promise.reject(error);
+    }
 
     if (
       error.response?.status === 401 &&
       originalRequest &&
-      !(originalRequest as any)._retry
+      !originalRequest._retry
     ) {
-      (originalRequest as any)._retry = true;
+      originalRequest._retry = true;
 
       try {
-        const { data } = await axios.get<RefreshResponse>(
-          "https://server-task-flow-kpu2.onrender.com/users/current",
-          { withCredentials: true }
+        const { data } = await taskFlowAPI.get<RefreshResponse>(
+          "/users/current"
         );
 
-        setAuthHeader(data.accessToken);
-
-        if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        if (data.accessToken) {
+          setAuthHeader(data.accessToken);
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+          }
         }
-
         return taskFlowAPI(originalRequest);
       } catch (refreshError) {
         resetAuthHeader();
@@ -70,15 +80,11 @@ export const registerThunk = createAsyncThunk<
       credentials
     );
     setAuthHeader(data.accessToken);
-    toast.success("Registration successful! Welcome aboard.");
+    toast.success("Registration successful!");
     return data;
   } catch (error: any) {
     const message = error.response?.data?.message || error.message;
-    if (error.response?.status === 409) {
-      toast.error("User with the same email already exists.");
-    } else {
-      toast.error("Ooops... Registration failed.");
-    }
+    toast.error(message || "Registration failed");
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -98,7 +104,7 @@ export const loginThunk = createAsyncThunk<
     return data;
   } catch (error: any) {
     const message = error.response?.data?.message || error.message;
-    toast.error("Login failed. Please check your credentials.");
+    toast.error("Login failed. Check credentials.");
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -111,7 +117,6 @@ export const logoutThunk = createAsyncThunk<
   try {
     await taskFlowAPI.post("/auth/logout");
     resetAuthHeader();
-    toast.success("Logout successful!");
   } catch (error: any) {
     resetAuthHeader();
     return thunkAPI.rejectWithValue(error.message);
@@ -123,16 +128,20 @@ export const refreshUserThunk = createAsyncThunk<
   void,
   { state: RootState; rejectValue: string }
 >("user/refresh", async (_, thunkAPI) => {
-  const savedToken = thunkAPI.getState().auth.token;
+  const state = thunkAPI.getState() as RootState;
+  const savedToken = state.auth.token;
 
   if (!savedToken) {
-    return thunkAPI.rejectWithValue("No token found");
+    return thunkAPI.rejectWithValue("No token");
   }
 
   setAuthHeader(savedToken);
 
   try {
     const { data } = await taskFlowAPI.get<RefreshResponse>("/users/current");
+    if (data.accessToken) {
+      setAuthHeader(data.accessToken);
+    }
     return data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);

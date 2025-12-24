@@ -21,11 +21,12 @@ export const projectSchema = z.object({
 export const updateProjectSchema = projectSchema.partial();
 
 export const taskSchema = z.object({
-  title: titleRule,
-  description: descriptionRule,
-  deadline: z.date().nullable().optional(),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  deadline: z.string().nullable().optional(),
+  priority: z.enum(["low", "medium", "high"]),
+  assignedTo: z.string().nullable().optional(),
 });
-
 export const updateTaskSchema = taskSchema.partial();
 
 export type ProjectFormData = z.infer<typeof projectSchema>;

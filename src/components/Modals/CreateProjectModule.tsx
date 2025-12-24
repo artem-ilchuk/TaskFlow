@@ -36,7 +36,6 @@ const CreateProjectModule: FC = () => {
       await createProject({
         title: data.title,
         description: data.description ?? "",
-        ownerId: userId,
       });
 
       setIsOpen(false);

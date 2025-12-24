@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import api from "./instance";
 import * as Ops from "../types/operations";
+import { IUser } from "../types/userTypes";
 
 interface ApiResponse<T> {
   status: number;
@@ -84,7 +85,6 @@ class ApiRequests {
   ): Promise<Ops.ITask> {
     const { id, _id, ownerId, projectId, createdAt, updatedAt, ...payload } =
       data as any;
-
     const response = await api.patch<ApiResponse<Ops.ITask>>(
       `/tasks/${taskId}`,
       payload
@@ -94,6 +94,11 @@ class ApiRequests {
 
   public async deleteTask(taskId: string): Promise<void> {
     await api.delete(`/tasks/${taskId}`);
+  }
+
+  public async getUsers(): Promise<IUser[]> {
+    const response = await api.get<ApiResponse<IUser[]>>("/members/all");
+    return this.handleResponse(response);
   }
 }
 

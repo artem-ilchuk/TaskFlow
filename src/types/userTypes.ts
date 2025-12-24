@@ -4,6 +4,14 @@ export interface User {
   email: string | null;
 }
 
+export interface IUser {
+  id: string;
+  _id: string;
+  name: string;
+  email: string;
+  avatar: string | null;
+}
+
 export type AuthPayload = {
   user: { name: string | null; email: string | null };
   accessToken: string;

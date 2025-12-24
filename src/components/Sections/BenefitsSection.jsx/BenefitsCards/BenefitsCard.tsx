@@ -28,7 +28,7 @@ const BenefitsCard: React.FC<BenefitsCardProps> = ({
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="flex flex-col items-center justify-center gap-3 w-85 h-48 rounded-2xl bg-white shadow-[0_25px_100px_rgba(76,64,247,0.08)] p-6 md:w-[232px] md:h-[239px]  lg:w-[270px] lg:h-[300px] "
+      className="flex flex-col items-center justify-center gap-3 w-85 h-48 rounded-2xl bg-white shadow-[0_25px_100px_rgba(76,64,247,0.08)] p-6 md:w-58 md:h-59.75  lg:w-67.5 lg:h-75 "
     >
       <h3
         className={`text-4xl md:text-5xl font-semibold text-center `}
