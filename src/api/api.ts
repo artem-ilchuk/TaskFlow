@@ -13,10 +13,12 @@ class ApiRequests {
   private handleResponse<T>(response: AxiosResponse<ApiResponse<T>>): T {
     const rawData = response.data?.data;
 
-    if (!rawData) return (Array.isArray(rawData) ? [] : {}) as unknown as T;
+    if (!rawData) {
+      return (Array.isArray(rawData) ? [] : {}) as T;
+    }
 
     if (Array.isArray(rawData)) {
-      return rawData.map((item: any) => ({
+      return rawData.map((item) => ({
         ...item,
         id: item._id || item.id,
       })) as unknown as T;

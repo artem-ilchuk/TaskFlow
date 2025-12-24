@@ -15,12 +15,12 @@ export const useProjectOperations = () => {
     queryKey: ["projects"],
     queryFn: () => ApiRequest.getProjects(),
     enabled: !!token && isLoggedIn && !isRefreshing,
-    select: (data) => [...(data ?? [])],
+    staleTime: 1000 * 60,
   });
 
   const createProjectMutation = useMutation({
     mutationFn: async (payload: Omit<IProjectPayload, "ownerId">) => {
-      const actualId = user.id || (user as any)._id;
+      const actualId = user?.id || (user as any)?._id;
       if (!actualId) throw new Error("User ID is missing");
       return ApiRequest.createProject({ ...payload, ownerId: actualId });
     },
@@ -60,13 +60,10 @@ export const useProjectOperations = () => {
   return {
     projects: projectsQuery.data ?? [],
     isLoading: projectsQuery.isLoading,
-
     createProject: createProjectMutation.mutate,
     isCreating: createProjectMutation.isPending,
-
     updateProject: updateProjectMutation.mutate,
     isUpdating: updateProjectMutation.isPending,
-
     deleteProject: deleteProjectMutation.mutate,
     isDeleting: deleteProjectMutation.isPending,
   };

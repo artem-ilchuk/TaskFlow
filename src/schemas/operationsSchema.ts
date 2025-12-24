@@ -23,7 +23,7 @@ export const updateProjectSchema = projectSchema.partial();
 export const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
-  deadline: z.string().nullable().optional(),
+  deadline: z.union([z.date(), z.string()]).nullable().optional(),
   priority: z.enum(["low", "medium", "high"]),
   assignedTo: z.string().nullable().optional(),
 });

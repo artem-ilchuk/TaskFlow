@@ -3,13 +3,12 @@ import { useUsers } from "../../hooks/useUsers";
 import clsx from "clsx";
 
 interface UserSelectProps {
-  value: string | null;
+  value: string | null | undefined;
   onChange: (id: string | null) => void;
 }
 
 export const UserSelect: FC<UserSelectProps> = ({ value, onChange }) => {
   const { data: users, isLoading } = useUsers();
-
   const selectedUser = users?.find((u) => u.id === value);
 
   return (
@@ -43,7 +42,6 @@ export const UserSelect: FC<UserSelectProps> = ({ value, onChange }) => {
           )}
         </div>
       </label>
-
       <ul
         tabIndex={0}
         className="dropdown-content z-50 menu p-2 shadow-2xl bg-base-100 rounded-xl w-full border border-base-300 mt-2 max-h-60 overflow-y-auto"
@@ -58,7 +56,6 @@ export const UserSelect: FC<UserSelectProps> = ({ value, onChange }) => {
           </button>
         </li>
         <div className="divider my-0 opacity-10" />
-
         {isLoading ? (
           <li className="p-4 text-center">
             <span className="loading loading-dots loading-sm" />
@@ -74,7 +71,6 @@ export const UserSelect: FC<UserSelectProps> = ({ value, onChange }) => {
                 )}
                 onClick={() => {
                   onChange(user.id);
-
                   (document.activeElement as HTMLElement)?.blur();
                 }}
               >

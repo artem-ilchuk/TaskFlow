@@ -37,6 +37,7 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
   });
 
   const onSubmit = (data: TaskFormData) => {
+    console.log("Form Data to send:", data);
     createTask(
       {
         ...data,
@@ -52,6 +53,11 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
     );
   };
 
+  // Помогает увидеть ошибки валидации, если клик "не срабатывает"
+  const onInvalid = (formErrors: any) => {
+    console.error("Validation Errors:", formErrors);
+  };
+
   return (
     <>
       <button
@@ -65,7 +71,10 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
       </button>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="New Task">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          className="space-y-4"
+        >
           <div className="form-control">
             <label className="label font-black text-[10px] uppercase opacity-40">
               Title
@@ -77,6 +86,11 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
               }`}
               placeholder="Task name..."
             />
+            {errors.title && (
+              <span className="text-error text-[10px] mt-1">
+                {errors.title.message}
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

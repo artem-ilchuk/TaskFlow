@@ -1,26 +1,30 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { ApiRequest } from "../api/api";
-import { ICreateTaskPayload, ITask } from "../types/operations";
+import * as Ops from "../types/operations";
 
 export const useTaskOperations = (projectId: string) => {
   const queryClient = useQueryClient();
   const tasksQueryKey = ["projects", projectId, "tasks"];
 
-  const { data: tasks = [], isLoading } = useQuery({
+  const { data: tasks, isLoading } = useQuery({
     queryKey: tasksQueryKey,
     queryFn: () => ApiRequest.getTasksByProjectId(projectId),
-    enabled: !!projectId,
+    enabled: !!projectId && projectId !== "undefined",
+    staleTime: 1000 * 30,
   });
 
   const { mutate: createTask, isPending: isCreating } = useMutation({
-    mutationFn: (payload: ICreateTaskPayload) => ApiRequest.createTask(payload),
+    mutationFn: (payload: Ops.ICreateTaskPayload) =>
+      ApiRequest.createTask(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey });
       toast.success("Task added!");
     },
-    onError: (error: Error) =>
-      toast.error(error.message || "Failed to add task"),
+    onError: (error: any) =>
+      toast.error(
+        error.response?.data?.message || error.message || "Failed to add task"
+      ),
   });
 
   const { mutate: deleteTask, isPending: isDeleting } = useMutation({
@@ -29,20 +33,30 @@ export const useTaskOperations = (projectId: string) => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey });
       toast.success("Task deleted");
     },
-    onError: (error: Error) =>
-      toast.error(error.message || "Failed to delete task"),
+    onError: (error: any) =>
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to delete task"
+      ),
   });
 
   const { mutate: updateTask, isPending: isUpdating } = useMutation({
-    mutationFn: ({ taskId, data }: { taskId: string; data: Partial<ITask> }) =>
-      ApiRequest.updateTask(taskId, data),
+    mutationFn: ({
+      taskId,
+      data,
+    }: {
+      taskId: string;
+      data: Partial<Ops.ITask>;
+    }) => ApiRequest.updateTask(taskId, data),
 
     onMutate: async ({ taskId, data }) => {
       await queryClient.cancelQueries({ queryKey: tasksQueryKey });
 
-      const previousTasks = queryClient.getQueryData<ITask[]>(tasksQueryKey);
+      const previousTasks =
+        queryClient.getQueryData<Ops.ITask[]>(tasksQueryKey);
 
-      queryClient.setQueryData<ITask[]>(tasksQueryKey, (old) => {
+      queryClient.setQueryData<Ops.ITask[]>(tasksQueryKey, (old) => {
         if (!old) return [];
         return old.map((task) =>
           task.id === taskId ? { ...task, ...data } : task
@@ -52,11 +66,15 @@ export const useTaskOperations = (projectId: string) => {
       return { previousTasks };
     },
 
-    onError: (error: Error, _variables, context) => {
+    onError: (error: any, _variables, context) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(tasksQueryKey, context.previousTasks);
       }
-      toast.error(error.message || "Failed to update task");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update task"
+      );
     },
 
     onSettled: () => {
@@ -65,7 +83,7 @@ export const useTaskOperations = (projectId: string) => {
   });
 
   return {
-    tasks,
+    tasks: tasks ?? [],
     isLoading,
     createTask,
     isCreating,
