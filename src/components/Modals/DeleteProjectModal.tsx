@@ -46,6 +46,7 @@ const DeleteProjectModal: FC<DeleteProjectModalProps> = ({
             onClick={handleDelete}
             className="btn btn-error flex-2 text-white bg-red-500 hover:bg-red-600 border-none"
             disabled={isDeleting}
+            aria-label="Delete project"
           >
             {isDeleting ? (
               <span className="loading loading-spinner"></span>

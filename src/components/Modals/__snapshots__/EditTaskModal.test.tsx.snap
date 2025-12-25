@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`EditTaskModal Integration should render and match snapshots in different states: edit-modal-error 1`] = `<DocumentFragment />`;
+
+exports[`EditTaskModal Integration should render and match snapshots in different states: edit-modal-initial 1`] = `<DocumentFragment />`;

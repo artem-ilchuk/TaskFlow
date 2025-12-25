@@ -11,7 +11,7 @@ const initialState: AuthState = {
   user: { id: null, name: null, email: null },
   token: null,
   isLoggedIn: false,
-  isRefreshing: true,
+  isRefreshing: false,
   isAuthLoading: false,
   isAuthError: null,
   isRegistering: false,

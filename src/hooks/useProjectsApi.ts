@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ApiRequest } from "../api/api";
 import { toast } from "react-hot-toast";
 import { RootState } from "../redux/store";
-import { IProjectPayload, IProject } from "../types/operations";
+import * as Ops from "../types/operations";
 
 export const useProjectOperations = () => {
   const queryClient = useQueryClient();
@@ -19,30 +19,18 @@ export const useProjectOperations = () => {
   });
 
   const createProjectMutation = useMutation({
-    mutationFn: async (
-      payload: Omit<IProjectPayload, "ownerId">
-    ): Promise<IProject> => {
+    mutationFn: async (payload: Omit<Ops.IProjectPayload, "ownerId">) => {
       const actualId = user?.id || (user as any)?._id;
       if (!actualId) throw new Error("User ID is missing. Please re-login.");
 
-      const finalData: IProjectPayload = {
-        title: payload.title,
-        description: payload.description,
-        ownerId: actualId,
-      };
-
-      return ApiRequest.createProject(finalData);
+      return ApiRequest.createProject({ ...payload, ownerId: actualId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Project created successfully!");
     },
     onError: (error: any) => {
-      const msg =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to create project";
-      toast.error(msg);
+      toast.error(error.message || "Failed to create project");
     },
   });
 
@@ -52,7 +40,7 @@ export const useProjectOperations = () => {
       data,
     }: {
       id: string;
-      data: Partial<IProjectPayload>;
+      data: Partial<Ops.IProjectPayload>;
     }) => {
       return ApiRequest.updateProject(id, data);
     },
@@ -77,10 +65,11 @@ export const useProjectOperations = () => {
     isLoading: projectsQuery.isLoading,
 
     createProject: createProjectMutation.mutateAsync,
-    isCreating: createProjectMutation.isPending,
     updateProject: updateProjectMutation.mutateAsync,
-    isUpdating: updateProjectMutation.isPending,
     deleteProject: deleteProjectMutation.mutateAsync,
+
+    isCreating: createProjectMutation.isPending,
+    isUpdating: updateProjectMutation.isPending,
     isDeleting: deleteProjectMutation.isPending,
   };
 };

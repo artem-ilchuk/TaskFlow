@@ -65,32 +65,49 @@ const EditTaskModal: FC<EditTaskModalProps> = ({ isOpen, onClose, task }) => {
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Task">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="form-control">
-          <label className="label font-bold text-xs uppercase opacity-50">
+          <label
+            htmlFor="edit-task-title"
+            className="label font-bold text-xs uppercase opacity-50"
+          >
             Title
           </label>
           <input
+            id="edit-task-title"
             {...register("title")}
             className={`input input-bordered w-full ${
               errors.title ? "input-error" : ""
             }`}
           />
+          {errors.title && (
+            <span className="text-error text-xs mt-1">
+              {errors.title.message}
+            </span>
+          )}
         </div>
 
         <div className="form-control">
-          <label className="label font-bold text-xs uppercase opacity-50">
+          <label
+            htmlFor="edit-task-desc"
+            className="label font-bold text-xs uppercase opacity-50"
+          >
             Description
           </label>
           <textarea
+            id="edit-task-desc"
             {...register("description")}
             className="textarea textarea-bordered h-24 resize-none"
           />
         </div>
 
         <div className="form-control">
-          <label className="label font-bold text-xs uppercase opacity-50">
+          <label
+            htmlFor="edit-task-deadline"
+            className="label font-bold text-xs uppercase opacity-50"
+          >
             Deadline
           </label>
           <input
+            id="edit-task-deadline"
             type="date"
             {...register("deadline")}
             className="input input-bordered"

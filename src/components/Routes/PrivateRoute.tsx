@@ -16,10 +16,6 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
   const isRefreshing = useSelector(selectIsRefreshing);
   const location = useLocation();
 
-  if (isRefreshing) {
-    return <Loader />;
-  }
-
   if (!isLoggedIn) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

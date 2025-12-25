@@ -37,7 +37,6 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
   });
 
   const onSubmit = (data: TaskFormData) => {
-    console.log("Form Data to send:", data);
     createTask(
       {
         ...data,
@@ -53,18 +52,14 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
     );
   };
 
-  // Помогает увидеть ошибки валидации, если клик "не срабатывает"
-  const onInvalid = (formErrors: any) => {
-    console.error("Validation Errors:", formErrors);
-  };
-
   return (
     <>
       <button
         onClick={() => setIsOpen(true)}
         className="btn btn-primary btn-sm gap-2 px-6 shadow-lg active:scale-95 transition-all"
+        aria-label="Add new task"
       >
-        <PlusIcon className="w-4 h-4 stroke-3" />
+        <PlusIcon className="w-4 h-4 stroke-3" aria-hidden="true" />
         <span className="font-black text-[11px] uppercase tracking-wider">
           Add Task
         </span>
@@ -72,14 +67,19 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="New Task">
         <form
-          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
+          noValidate
         >
           <div className="form-control">
-            <label className="label font-black text-[10px] uppercase opacity-40">
+            <label
+              htmlFor="task-title"
+              className="label font-black text-[10px] uppercase opacity-40"
+            >
               Title
             </label>
             <input
+              id="task-title"
               {...register("title")}
               className={`input input-bordered focus:border-primary font-bold bg-base-200/30 ${
                 errors.title ? "input-error" : ""
@@ -87,7 +87,7 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
               placeholder="Task name..."
             />
             {errors.title && (
-              <span className="text-error text-[10px] mt-1">
+              <span className="text-error text-[10px] mt-1" role="alert">
                 {errors.title.message}
               </span>
             )}
@@ -127,7 +127,10 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
             </div>
 
             <div className="form-control">
-              <label className="label font-black text-[10px] uppercase opacity-40">
+              <label
+                htmlFor="task-deadline"
+                className="label font-black text-[10px] uppercase opacity-40"
+              >
                 Deadline
               </label>
               <div className="relative">
@@ -137,6 +140,7 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
                   name="deadline"
                   render={({ field }) => (
                     <DatePicker
+                      id="task-deadline"
                       selected={field.value ? new Date(field.value) : null}
                       onChange={(date: Date | null) => field.onChange(date)}
                       className="input input-bordered w-full pl-10 text-[11px] font-bold bg-base-200/30 h-11"
@@ -151,10 +155,14 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
           </div>
 
           <div className="form-control">
-            <label className="label font-black text-[10px] uppercase opacity-40">
+            <label
+              htmlFor="task-desc"
+              className="label font-black text-[10px] uppercase opacity-40"
+            >
               Description
             </label>
             <textarea
+              id="task-desc"
               {...register("description")}
               className="textarea textarea-bordered h-20 resize-none bg-base-200/30 text-sm font-medium"
               placeholder="Details..."
@@ -166,6 +174,7 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
               type="button"
               className="btn btn-ghost btn-sm font-bold uppercase text-[10px]"
               onClick={() => setIsOpen(false)}
+              aria-label="Cancel task creation"
             >
               Cancel
             </button>
@@ -173,9 +182,13 @@ const CreateTaskModule: FC<CreateTaskModuleProps> = ({ projectId }) => {
               type="submit"
               className="btn btn-primary btn-sm px-8 font-black uppercase tracking-tighter"
               disabled={isCreating}
+              aria-label={isCreating ? "Creating task..." : "Create task"}
             >
               {isCreating ? (
-                <span className="loading loading-spinner loading-xs" />
+                <span
+                  className="loading loading-spinner loading-xs"
+                  aria-hidden="true"
+                />
               ) : (
                 "Create Task"
               )}

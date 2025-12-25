@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Testing CreateTaskModule should complete full flow and verify call count: modal-opened-empty 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Add new task"
+    class="btn btn-primary btn-sm gap-2 px-6 shadow-lg active:scale-95 transition-all"
+  >
+    <svg
+      aria-hidden="true"
+      class="w-4 h-4 stroke-3"
+      data-slot="icon"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4.5v15m7.5-7.5h-15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span
+      class="font-black text-[11px] uppercase tracking-wider"
+    >
+      Add Task
+    </span>
+  </button>
+  <style>
+    
+        .react-datepicker-wrapper { width: 100%; display: block; }
+        .react-datepicker__input-container { display: block; }
+      
+  </style>
+</DocumentFragment>
+`;
+
+exports[`Testing CreateTaskModule should handle loading state and disable button: submit-button-loading 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Add new task"
+    class="btn btn-primary btn-sm gap-2 px-6 shadow-lg active:scale-95 transition-all"
+  >
+    <svg
+      aria-hidden="true"
+      class="w-4 h-4 stroke-3"
+      data-slot="icon"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4.5v15m7.5-7.5h-15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span
+      class="font-black text-[11px] uppercase tracking-wider"
+    >
+      Add Task
+    </span>
+  </button>
+  <style>
+    
+        .react-datepicker-wrapper { width: 100%; display: block; }
+        .react-datepicker__input-container { display: block; }
+      
+  </style>
+</DocumentFragment>
+`;
+
+exports[`Testing CreateTaskModule should not call API if validation fails: validation-errors-active 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Add new task"
+    class="btn btn-primary btn-sm gap-2 px-6 shadow-lg active:scale-95 transition-all"
+  >
+    <svg
+      aria-hidden="true"
+      class="w-4 h-4 stroke-3"
+      data-slot="icon"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4.5v15m7.5-7.5h-15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span
+      class="font-black text-[11px] uppercase tracking-wider"
+    >
+      Add Task
+    </span>
+  </button>
+  <style>
+    
+        .react-datepicker-wrapper { width: 100%; display: block; }
+        .react-datepicker__input-container { display: block; }
+      
+  </style>
+</DocumentFragment>
+`;

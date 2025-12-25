@@ -105,19 +105,16 @@ const TaskCard: FC<TaskCardProps> = ({ task, index }) => {
               </div>
             </div>
 
-            {/* Title */}
             <h4 className="font-bold text-base-content leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">
               {task.title}
             </h4>
 
-            {/* Description */}
             {task.description && (
               <p className="text-xs text-base-content/60 line-clamp-2 mb-4 leading-relaxed">
                 {task.description}
               </p>
             )}
 
-            {/* Footer: Meta Info */}
             <div className="flex items-center justify-between pt-3 border-t border-base-200 mt-2">
               <div className="flex items-center gap-2">
                 {formattedDeadline && (
@@ -147,8 +144,8 @@ const TaskCard: FC<TaskCardProps> = ({ task, index }) => {
                   />
                 )}
                 <div className="avatar placeholder">
-                  <div className="bg-neutral text-neutral-content rounded-full w-6 h-6 ring-2 ring-base-100">
-                    <span className="text-[10px] font-black uppercase">
+                  <div className="bg-neutral text-neutral-content rounded-full w-6 h-6 ring-2 ring-base-100 flex items-center justify-center">
+                    <span className="text-[10px] font-black uppercase leading-none">
                       {task.assignedTo?.name?.slice(0, 1) || "U"}
                     </span>
                   </div>

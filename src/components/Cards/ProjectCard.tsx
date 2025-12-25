@@ -9,7 +9,7 @@ interface ProjectCardProps {
   id: string;
   title: string;
   description: string;
-  img?: string;
+  img?: string | null;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({ id, title, description, img }) => {
