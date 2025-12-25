@@ -27,6 +27,7 @@ const Header: React.FC = () => {
               to="/"
               className="cursor-pointer"
               aria-label="Go to home page"
+              data-testid="logoLink"
             >
               <svg className="w-11 h-11 md:w-12 md:h-12 lg:w-16 lg:h-16">
                 <use href="/sprite.svg#taskflow-logo" />
@@ -46,7 +47,11 @@ const Header: React.FC = () => {
           ></div>
 
           <InlineLayout gap={{ sm: "l", lg: "xxl" }}>
-            <Toggleswitch theme={theme} toggleTheme={toggleTheme} />
+            <Toggleswitch
+              data-testid="toggle"
+              theme={theme}
+              toggleTheme={toggleTheme}
+            />
             {!isLoggedIn ? (
               <button
                 className="btn btn-outline btn-accent btn-xs sm:px-8 py-4 md:btn-md lg:btn-lg hover:scale-105 lg:ml-20"

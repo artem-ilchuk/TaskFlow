@@ -41,6 +41,7 @@ const LoginForm: React.FC = () => {
           </legend>
 
           <AiFillCloseCircle
+            data-testid="login-close"
             onClick={handleClose}
             className="absolute top-1 right-3 w-6 h-6 md:w-8 md:h-8 cursor-pointer hover:scale-110 hover:text-red-700 transition-transform duration-200"
           />
@@ -50,6 +51,7 @@ const LoginForm: React.FC = () => {
               Email
             </label>
             <input
+              data-testid="login-email"
               name="email"
               type="email"
               autoComplete="username"
@@ -72,6 +74,7 @@ const LoginForm: React.FC = () => {
             </label>
             <div className="relative pb-1">
               <input
+                data-testid="login-password"
                 name="password"
                 type={passwordVisibility ? "text" : "password"}
                 autoComplete="current-password"
@@ -97,6 +100,7 @@ const LoginForm: React.FC = () => {
 
           <div className="w-full pt-8">
             <button
+              data-testid="login-submit"
               type="submit"
               className="btn btn-accent w-full h-12 md:h-14 text-6xl md:text-xl flex justify-center items-center cursor-pointer hover:scale-[1.02] hover:shadow-lg transition-all duration-200"
               disabled={isLoading}
@@ -116,6 +120,7 @@ const LoginForm: React.FC = () => {
           <p className="text-base md:text-lg text-center pt-8 text-base-content/70">
             Still don't have an account?
             <NavLink
+              data-testid="to-register-link"
               to="/register"
               className="text-accent underline pl-2 font-bold hover:text-accent-focus transition-colors"
             >

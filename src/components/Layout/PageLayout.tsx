@@ -10,6 +10,7 @@ const PageLayout: React.FC = () => {
     <div
       className="bg-bg text-text min-h-screen transition-colors duration-500"
       data-theme={theme}
+      data-testid="theme"
     >
       <Header />
       <main className="min-h-[70vh] ">

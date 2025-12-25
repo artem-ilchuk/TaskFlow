@@ -46,6 +46,7 @@ const RegisterForm: React.FC = () => {
           </legend>
 
           <AiFillCloseCircle
+            data-testid="register-close"
             onClick={handleClose}
             className="absolute top-1 right-3 w-6 h-6 md:w-8 md:h-8 cursor-pointer hover:scale-110 hover:text-red-700 transition-transform duration-200"
           />
@@ -55,6 +56,7 @@ const RegisterForm: React.FC = () => {
               Name
             </label>
             <input
+              data-testid="register-name"
               name="name"
               type="text"
               className="input input-accent w-full h-12 md:h-14 text-lg"
@@ -75,6 +77,7 @@ const RegisterForm: React.FC = () => {
               Email
             </label>
             <input
+              data-testid="register-email"
               name="email"
               type="email"
               className="input input-accent w-full h-12 md:h-14 text-lg"
@@ -96,6 +99,7 @@ const RegisterForm: React.FC = () => {
             </label>
             <div className="relative">
               <input
+                data-testid="register-password"
                 name="password"
                 type={passwordVisibility ? "text" : "password"}
                 className="input input-accent w-full h-12 md:h-14 text-lg"
@@ -121,6 +125,7 @@ const RegisterForm: React.FC = () => {
           <div className="w-full mt-4">
             <label className="flex items-center gap-4 cursor-pointer">
               <input
+                data-testid="policy-checkbox"
                 name="accept"
                 type="checkbox"
                 className="checkbox checkbox-accent checkbox-md md:checkbox-lg rounded-md"
@@ -147,6 +152,7 @@ const RegisterForm: React.FC = () => {
 
           <div className="w-full pt-8">
             <button
+              data-testid="register-submit"
               type="submit"
               className="btn btn-accent w-full h-12 md:h-14 text-lg md:text-xl flex justify-center items-center cursor-pointer hover:scale-[1.02] hover:shadow-lg transition-all duration-200"
               disabled={isSubmitDisabled}
@@ -166,6 +172,7 @@ const RegisterForm: React.FC = () => {
           <p className="text-base md:text-lg text-center pt-8 text-base-content/70">
             Already have account?
             <NavLink
+              data-testid="to-login-link"
               to="/login"
               className="pl-2 text-accent underline font-bold hover:text-accent-focus transition-colors"
             >
