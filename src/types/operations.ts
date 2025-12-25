@@ -27,6 +27,12 @@ export interface ITask {
   updatedAt?: string;
 }
 
+export interface ITaskFilters {
+  search: string;
+  priority: Priority | "all";
+  status: TaskStatus | "all";
+}
+
 export interface IProject {
   id: string;
   _id?: string;

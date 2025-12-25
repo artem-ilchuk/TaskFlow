@@ -16,7 +16,7 @@ const Loader: React.FC<LoaderProps> = ({
   width = 8,
   color = "#9e40ba",
   margin = 4,
-  show = false,
+  show = true,
   delay = 0,
   children = null,
 }) => {
@@ -48,7 +48,11 @@ const Loader: React.FC<LoaderProps> = ({
   }
 
   return (
-    <div className="flex justify-center items-center">
+    <div
+      className={`flex justify-center items-center ${
+        !children ? "min-h-50 w-full" : ""
+      }`}
+    >
       <ScaleLoader
         height={height}
         width={width}

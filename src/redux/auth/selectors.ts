@@ -26,6 +26,7 @@ export const selectIsRegistering = createSelector(
   [selectAuth],
   (auth) => auth.isRegistering
 );
+export const selectToken = createSelector([selectAuth], (auth) => auth.token);
 
 export const selectAuthStatus = createSelector(
   [selectIsLoggedIn, selectIsRefreshing, selectIsAuthLoading],

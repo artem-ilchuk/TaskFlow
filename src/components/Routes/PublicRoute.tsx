@@ -5,7 +5,6 @@ import {
   selectIsRefreshing,
 } from "../../redux/auth/selectors";
 import { Navigate, useLocation } from "react-router-dom";
-import Loader from "../Common/Loader";
 
 interface PublicRouteProps {
   children: ReactNode;

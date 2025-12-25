@@ -1,85 +1,91 @@
-import { FC, useEffect, useMemo, memo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useMemo, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useTaskOperations } from "../hooks/useTasksApi";
+import { useDebounce } from "../hooks/useDebounce";
+import { FilterPanel } from "../components/Modals/FilterPanel";
 import TaskColumn from "../components/UIComponents/TaskContainer";
-import CreateTaskModule from "../components/Modals/CreateTaskModule";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { KANBAN_COLUMNS, TaskStatus } from "../types/operations";
-import { normalizeTaskStatus } from "../utils/statusNormalizer";
+import * as Ops from "../types/operations";
 
-const ProjectDetailsPage: FC = () => {
+const ProjectDetailsPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const navigate = useNavigate();
-  const { tasks, isLoading, updateTask } = useTaskOperations(projectId ?? "");
 
-  useEffect(() => {
-    if (!projectId) navigate("/dashboard/projects", { replace: true });
-  }, [projectId, navigate]);
+  const [filters, setFilters] = useState<Ops.ITaskFilters>({
+    search: "",
+    priority: "all",
+    status: "all",
+  });
 
-  const tasksByStatus = useMemo(() => {
-    return tasks.reduce((acc, task) => {
-      const status = normalizeTaskStatus(task.status);
-      if (!acc[status]) acc[status] = [];
-      acc[status].push(task);
-      return acc;
-    }, {} as Record<TaskStatus, typeof tasks>);
-  }, [tasks]);
+  const debouncedSearch = useDebounce(filters.search, 400);
 
-  const onDragEnd = (result: DropResult) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
-    updateTask({
-      taskId: draggableId,
-      data: { status: destination.droppableId as TaskStatus },
-    });
-  };
+  const activeFilters = useMemo(
+    () => ({
+      ...filters,
+      search: debouncedSearch,
+    }),
+    [debouncedSearch, filters.priority, filters.status]
+  );
+
+  const { tasks, isLoading, updateTask } = useTaskOperations(
+    projectId || "",
+    activeFilters
+  );
+
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { destination, source, draggableId } = result;
+
+      if (!destination) return;
+      if (
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index
+      ) {
+        return;
+      }
+
+      const newStatus = destination.droppableId as Ops.TaskStatus;
+
+      updateTask({
+        taskId: draggableId,
+        data: { status: newStatus },
+      });
+    },
+    [updateTask]
+  );
 
   return (
-    <div className="flex flex-col h-screen bg-base-200/50">
-      {/* Хедер рендерится всегда, создавая ощущение мгновенной загрузки */}
-      <header className="flex items-center justify-between px-8 py-4 bg-base-100 border-b border-base-300">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate("/dashboard/projects")}
-            className="btn btn-ghost btn-sm btn-circle"
-          >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </button>
-          <h1 className="text-xl font-black uppercase tracking-tighter">
-            Project Board
-          </h1>
+    <div className="flex flex-col gap-6">
+      <FilterPanel filters={filters} setFilters={setFilters} />
+
+      <header className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Project Board</h1>
+          <p className="text-xs opacity-50 uppercase font-bold tracking-tighter mt-1">
+            Managing tasks for project ID: {projectId?.slice(-8)}
+          </p>
         </div>
-        <CreateTaskModule projectId={projectId ?? ""} />
       </header>
 
-      <main className="flex-1 overflow-x-auto p-8 scrollbar-hide relative">
-        {isLoading ? (
-          // Лоадер только внутри контентной части
-          <div className="absolute inset-0 flex items-center justify-center bg-base-200/10 backdrop-blur-[2px] z-10">
-            <div className="flex flex-col items-center gap-4">
-              <span className="loading loading-infinity loading-lg text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">
-                Loading tasks...
-              </span>
-            </div>
-          </div>
-        ) : (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-6 items-start h-full">
-              {KANBAN_COLUMNS.map((column) => (
+      {isLoading ? (
+        <div className="flex justify-center items-center py-40">
+          <span className="loading loading-infinity loading-lg text-primary"></span>
+        </div>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scroll-px-6 custom-scrollbar">
+            {Ops.KANBAN_COLUMNS.map((column) => (
+              <div key={column.id} className="snap-start">
                 <TaskColumn
-                  key={column.id}
                   column={column}
-                  tasks={tasksByStatus[column.id as TaskStatus] || []}
+                  tasks={tasks.filter((t) => t.status === column.id)}
                 />
-              ))}
-            </div>
-          </DragDropContext>
-        )}
-      </main>
+              </div>
+            ))}
+          </div>
+        </DragDropContext>
+      )}
     </div>
   );
 };
 
-export default memo(ProjectDetailsPage);
+export default ProjectDetailsPage;

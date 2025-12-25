@@ -18,7 +18,6 @@ const NotificationBell: React.FC = () => {
 
   return (
     <div className="flex items-center gap-4 text-base-content">
-      {/* Визуальный индикатор оставляем, он полезен для понимания статуса без тостов */}
       {isListening && (
         <div
           className={`hidden md:flex items-center gap-3 px-5 py-2 rounded-xl border-2 font-black font-mono tracking-widest transition-all duration-300 ${

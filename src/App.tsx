@@ -1,7 +1,7 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsRefreshing } from "./redux/auth/selectors";
+import { selectIsRefreshing, selectToken } from "./redux/auth/selectors";
 import { refreshUserThunk } from "./redux/auth/operations";
 import Loader from "./components/Common/Loader";
 import PublicRoute from "./components/Routes/PublicRoute";
@@ -24,10 +24,13 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const isRefreshing = useSelector(selectIsRefreshing);
+  const token = useSelector(selectToken);
 
   useEffect(() => {
-    dispatch(refreshUserThunk());
-  }, [dispatch]);
+    if (token) {
+      dispatch(refreshUserThunk());
+    }
+  }, [dispatch, token]);
 
   if (isRefreshing) {
     return <Loader />;

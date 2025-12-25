@@ -3,7 +3,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   Squares2X2Icon,
-  FolderIcon,
   UserCircleIcon,
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";

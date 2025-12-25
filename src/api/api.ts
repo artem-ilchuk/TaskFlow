@@ -46,14 +46,21 @@ class ApiRequests {
     return rawData;
   }
 
-  public async getProjects(): Promise<Ops.IProject[]> {
-    const response = await api.get<ApiResponse<Ops.IProject[]>>("/projects");
+  public async getProjects(
+    search?: string,
+    signal?: AbortSignal
+  ): Promise<Ops.IProject[]> {
+    const response = await api.get<ApiResponse<Ops.IProject[]>>("/projects", {
+      params: search ? { search } : {},
+      signal,
+    });
     return this.handleResponse(response);
   }
 
   public async getProjectsPaginated(
     limit: number = 20,
-    cursor?: string
+    cursor?: string,
+    signal?: AbortSignal
   ): Promise<PaginatedResponse<Ops.IProject>> {
     const response = await api.get<
       ApiResponse<{
@@ -61,7 +68,10 @@ class ApiRequests {
         total: number;
         nextCursor?: string;
       }>
-    >("/projects", { params: { limit, cursor } });
+    >("/projects", {
+      params: { limit, cursor },
+      signal,
+    });
 
     const mappedData = this.handleResponse(response);
 
@@ -72,9 +82,13 @@ class ApiRequests {
     };
   }
 
-  public async getProjectById(id: string): Promise<Ops.IProject> {
+  public async getProjectById(
+    id: string,
+    signal?: AbortSignal
+  ): Promise<Ops.IProject> {
     const response = await api.get<ApiResponse<Ops.IProject>>(
-      `/projects/${id}`
+      `/projects/${id}`,
+      { signal }
     );
     return this.handleResponse(response);
   }
@@ -102,15 +116,30 @@ class ApiRequests {
     await api.delete(`/projects/${id}`);
   }
 
-  public async getTasksByProjectId(projectId: string): Promise<Ops.ITask[]> {
-    const response = await api.get<ApiResponse<Ops.ITask[]>>(
-      `/tasks/project/${projectId}`
-    );
+  public async createTask(payload: Ops.ICreateTaskPayload): Promise<Ops.ITask> {
+    const response = await api.post<ApiResponse<Ops.ITask>>("/tasks", payload);
     return this.handleResponse(response);
   }
 
-  public async createTask(payload: Ops.ICreateTaskPayload): Promise<Ops.ITask> {
-    const response = await api.post<ApiResponse<Ops.ITask>>("/tasks", payload);
+  public async getTasksByProjectId(
+    projectId: string,
+    filters?: Ops.ITaskFilters,
+    signal?: AbortSignal
+  ): Promise<Ops.ITask[]> {
+    const params: Record<string, string> = {};
+
+    if (filters) {
+      if (filters.search) params.search = filters.search;
+      if (filters.priority && filters.priority !== "all")
+        params.priority = filters.priority;
+      if (filters.status && filters.status !== "all")
+        params.status = filters.status;
+    }
+
+    const response = await api.get<ApiResponse<Ops.ITask[]>>(
+      `/tasks/project/${projectId}`,
+      { params, signal }
+    );
     return this.handleResponse(response);
   }
 
@@ -132,19 +161,24 @@ class ApiRequests {
     await api.delete(`/tasks/${taskId}`);
   }
 
-  public async getUsers(): Promise<IUser[]> {
-    const response = await api.get<ApiResponse<IUser[]>>("/members/all");
+  public async getUsers(signal?: AbortSignal): Promise<IUser[]> {
+    const response = await api.get<ApiResponse<IUser[]>>("/members/all", {
+      signal,
+    });
     return this.handleResponse(response);
   }
 
-  public async getCurrentUser(): Promise<IUser> {
-    const response = await api.get<ApiResponse<IUser>>("/auth/me");
+  public async getCurrentUser(signal?: AbortSignal): Promise<IUser> {
+    const response = await api.get<ApiResponse<IUser>>("/auth/me", { signal });
     return this.handleResponse(response);
   }
 
-  public async getLatestNotification(): Promise<INotification | null> {
+  public async getLatestNotification(
+    signal?: AbortSignal
+  ): Promise<INotification | null> {
     const response = await api.get<ApiResponse<INotification>>(
-      "/notifications/latest"
+      "/notifications/latest",
+      { signal }
     );
     const data = this.handleResponse(response);
     return data && (data as any).id ? data : null;

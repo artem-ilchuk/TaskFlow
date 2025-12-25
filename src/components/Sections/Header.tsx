@@ -40,9 +40,13 @@ const Header: React.FC = () => {
             </p>
           </InlineLayout>
 
+          <div
+            id="header-filters-slot"
+            className="hidden lg:block flex-1 max-w-2xl mx-10"
+          ></div>
+
           <InlineLayout gap={{ sm: "l", lg: "xxl" }}>
             <Toggleswitch theme={theme} toggleTheme={toggleTheme} />
-
             {!isLoggedIn ? (
               <button
                 className="btn btn-outline btn-accent btn-xs sm:px-8 py-4 md:btn-md lg:btn-lg hover:scale-105 lg:ml-20"

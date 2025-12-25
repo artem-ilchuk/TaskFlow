@@ -49,6 +49,14 @@ const authSlice = createSlice({
       .addCase(logoutThunk.fulfilled, () => {
         return { ...initialState, isRefreshing: false };
       })
+      // ДОБАВЛЕНО: Обработка начала запроса
+      .addMatcher(
+        isAnyOf(registerThunk.pending, loginThunk.pending),
+        (state) => {
+          state.isAuthLoading = true;
+          state.isAuthError = null;
+        }
+      )
       .addMatcher(
         isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled),
         (state, action: any) => {
