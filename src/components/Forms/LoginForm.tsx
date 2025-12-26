@@ -29,100 +29,74 @@ const LoginForm: React.FC = () => {
   const handleClose = useCallback(() => navigate("/"), [navigate]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-base-100 px-4 ">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md md:max-w-lg lg:max-w-xl"
-        noValidate
-      >
-        <fieldset className="relative fieldset bg-base-200 border-base-300 rounded-box w-full border p-6 sm:px-8 md:px-10 lg:px-12 shadow-2xl">
-          <legend className="fieldset-legend text-lg md:text-xl lg:text-2xl font-bold">
-            Login
-          </legend>
+    <div className="min-h-screen w-full flex items-center justify-center bg-base-100 px-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-md" noValidate>
+        <fieldset className="relative fieldset bg-base-200 border-base-300 rounded-box w-full border p-6 shadow-2xl">
+          <legend className="fieldset-legend text-lg font-bold">Login</legend>
 
-          <AiFillCloseCircle
+          <button
+            type="button"
             data-testid="login-close"
             onClick={handleClose}
-            className="absolute top-1 right-3 w-6 h-6 md:w-8 md:h-8 cursor-pointer hover:scale-110 hover:text-red-700 transition-transform duration-200"
-          />
+            className="absolute top-4 right-4 cursor-pointer hover:scale-110 transition-transform z-50"
+            aria-label="Close login form"
+          >
+            <AiFillCloseCircle className="w-8 h-8 md:w-10 md:h-10" />
+          </button>
 
-          <div className="w-full">
-            <label className="label text-base md:text-lg font-medium">
-              Email
-            </label>
+          <div className="form-control w-full">
+            <label className="label font-medium">Email</label>
             <input
               data-testid="login-email"
               name="email"
               type="email"
-              autoComplete="username"
-              className="input input-accent w-full h-12 md:h-14 text-lg"
+              className="input input-accent w-full h-12"
               placeholder="Email"
               value={form.email}
               onChange={handleChange}
               disabled={isLoading}
             />
-            {errors.email && (
-              <p className="text-red-500 text-base mt-1 font-semibold">
-                {errors.email}
-              </p>
-            )}
           </div>
 
-          <div className="w-full mt-4">
-            <label className="label text-base md:text-lg font-medium">
-              Password
-            </label>
-            <div className="relative pb-1">
+          <div className="form-control w-full mt-4">
+            <label className="label font-medium">Password</label>
+            <div className="relative">
               <input
                 data-testid="login-password"
                 name="password"
                 type={passwordVisibility ? "text" : "password"}
-                autoComplete="current-password"
-                className="input input-accent w-full h-12 md:h-14 text-lg"
+                className="input input-accent w-full h-12 pr-12"
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
                 disabled={isLoading}
               />
-              <div className="scale-125 absolute right-4 top-1/2 -translate-y-1/2">
-                <PasswordToggle
-                  visible={passwordVisibility}
-                  onClick={handlePasswordVisibility}
-                />
-              </div>
+              <PasswordToggle
+                visible={passwordVisibility}
+                onClick={handlePasswordVisibility}
+              />
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-base mt-1 font-semibold">
-                {errors.password}
-              </p>
-            )}
           </div>
 
           <div className="w-full pt-8">
             <button
               data-testid="login-submit"
               type="submit"
-              className="btn btn-accent w-full h-12 md:h-14 text-6xl md:text-xl flex justify-center items-center cursor-pointer hover:scale-[1.02] hover:shadow-lg transition-all duration-200"
+              className="btn btn-accent w-full h-12"
               disabled={isLoading}
             >
-              <Loader
-                show={isLoading}
-                height={20}
-                width={4}
-                color="#ffffff"
-                delay={200}
-              >
-                <span className="text-xl">Login</span>
+              <Loader show={isLoading} color="#ffffff">
+                <span>Login</span>
               </Loader>
             </button>
           </div>
 
-          <p className="text-base md:text-lg text-center pt-8 text-base-content/70">
+          <p className="text-center pt-6 opacity-70">
             Still don't have an account?
             <NavLink
               data-testid="to-register-link"
               to="/register"
-              className="text-accent underline pl-2 font-bold hover:text-accent-focus transition-colors"
+              className="text-accent underline pl-2 font-bold"
             >
               Let's register!
             </NavLink>
@@ -132,5 +106,4 @@ const LoginForm: React.FC = () => {
     </div>
   );
 };
-
 export default React.memo(LoginForm);

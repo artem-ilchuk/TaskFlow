@@ -16,6 +16,7 @@ const Toggleswitch: React.FC<ToggleswitchProps> = ({ theme, toggleTheme }) => {
       </svg>
 
       <input
+        data-testid="theme-toggle-input"
         type="checkbox"
         className="toggle"
         checked={theme === "dark"}
