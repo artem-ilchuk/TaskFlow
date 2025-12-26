@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, memo } from "react";
 import { useNotifications } from "../../context/notificationContext";
 import {
   BellIcon,
@@ -6,6 +6,27 @@ import {
   SignalIcon,
   NoSymbolIcon,
 } from "@heroicons/react/24/outline";
+
+const NotificationItem = memo(
+  ({
+    message,
+    createdAt,
+  }: {
+    message: string;
+    createdAt: string | number | Date;
+  }) => (
+    <div className="alert py-3 px-4 bg-base-200 border-l-4 border-primary rounded-xl text-left shadow-sm">
+      <div className="flex flex-col gap-1">
+        <span className="text-[9px] font-black font-mono opacity-40">
+          [{new Date(createdAt).toLocaleTimeString()}]
+        </span>
+        <span className="text-xs font-bold leading-tight">{message}</span>
+      </div>
+    </div>
+  )
+);
+
+NotificationItem.displayName = "NotificationItem";
 
 const NotificationBell: React.FC = () => {
   const {
@@ -15,6 +36,16 @@ const NotificationBell: React.FC = () => {
     clearNotifications,
     isListening,
   } = useNotifications();
+
+  const handleToggleMute = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      toggleMute();
+    },
+    [toggleMute]
+  );
+
+  const hasNotifications = notifications.length > 0;
 
   return (
     <div className="flex items-center gap-4 text-base-content">
@@ -51,11 +82,11 @@ const NotificationBell: React.FC = () => {
             ) : (
               <BellIcon
                 className={`w-8 h-8 ${
-                  notifications.length > 0 ? "animate-bounce" : ""
+                  hasNotifications ? "animate-bounce" : ""
                 }`}
               />
             )}
-            {notifications.length > 0 && !isMuted && (
+            {hasNotifications && !isMuted && (
               <span className="badge badge-md badge-primary indicator-item font-black border-2 border-base-100">
                 {notifications.length}
               </span>
@@ -74,10 +105,7 @@ const NotificationBell: React.FC = () => {
               </span>
               <div className="flex gap-2">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleMute();
-                  }}
+                  onClick={handleToggleMute}
                   className={`btn btn-xs font-bold ${
                     isMuted ? "btn-success" : "btn-error"
                   }`}
@@ -93,8 +121,8 @@ const NotificationBell: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 max-h-72 overflow-y-auto mt-3">
-              {notifications.length === 0 ? (
+            <div className="flex flex-col gap-2 max-h-72 overflow-y-auto mt-3 custom-scrollbar">
+              {!hasNotifications ? (
                 <div className="text-center py-10 opacity-20">
                   <BellIcon className="w-12 h-12 mx-auto mb-2" />
                   <p className="text-xs font-black font-mono tracking-widest uppercase">
@@ -103,19 +131,11 @@ const NotificationBell: React.FC = () => {
                 </div>
               ) : (
                 notifications.map((n) => (
-                  <div
+                  <NotificationItem
                     key={n.id}
-                    className="alert py-3 px-4 bg-base-200 border-l-4 border-primary rounded-xl text-left shadow-sm"
-                  >
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[9px] font-black font-mono opacity-40">
-                        [{new Date(n.createdAt).toLocaleTimeString()}]
-                      </span>
-                      <span className="text-xs font-bold leading-tight">
-                        {n.message}
-                      </span>
-                    </div>
-                  </div>
+                    message={n.message}
+                    createdAt={n.createdAt}
+                  />
                 ))
               )}
             </div>
@@ -126,4 +146,4 @@ const NotificationBell: React.FC = () => {
   );
 };
 
-export default NotificationBell;
+export default memo(NotificationBell);

@@ -1,16 +1,81 @@
-# React + Vite
+🚀 Task Flow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Task Flow is a high-performance project management platform built for speed and reliability. Leveraging a modern tech stack and a strict architectural approach, it provides a seamless experience for managing complex workflows with real-time feedback.
 
-Currently, two official plugins are available:
+✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+⚡ Modern UI: Crafted with Tailwind v4 and DaisyUI for a sleek, futuristic look and feel.
 
-## React Compiler
+🛡️ Strictly Typed: 100% TypeScript coverage with moduleResolution: "Bundler" for maximum type safety.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+🔐 Advanced Auth: Support for JWT-based authentication.
 
-## Expanding the ESLint configuration
+🔄 Smart Data Sync: State-of-the-art data fetching with TanStack Query and global state via Redux Toolkit.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+📡 Live Notifications: Real-time system monitoring and event-driven user alerts.
+
+🧪 E2E Tested: Mission-critical flows are fully covered by Playwright automation.
+
+🛠️ Technical Stack
+
+Frontend
+
+Engine: React 18 (Vite-powered)
+
+Languages: TypeScript (Strict Mode)
+
+State Management: Redux Toolkit (Slices & Async Thunks)
+
+Server State: TanStack Query v5
+
+Styling: Tailwind CSS v4 & DaisyUI
+
+Validation: Zod
+
+Architecture
+
+The project follows a Separation of Concerns (SoC) principle:
+
+ApiRequest Classes: All backend communication is encapsulated in static classes.
+
+Custom Hooks: Business logic and mutations are extracted into reusable hooks (e.g., useAuthForm, useProjectOperations).
+
+Atomic Components: UI is built using modular React components styled with utility-first CSS.
+
+🚀 Getting Started
+
+Prerequisites
+Node.js (v18+)
+
+npm or pnpm
+
+Installation
+Clone the repository:
+
+Bash
+
+git clone https://github.com/your-username/task-flow.git
+cd task-flow
+Install dependencies:
+
+Bash:
+npm install
+Environment Setup: Create a .env file in the root directory:
+
+Code snippet
+
+VITE_API_URL=https://your-api-base-url.com
+VITE_GOOGLE_CLIENT_ID=your-google-oauth-id
+Run Development Server:
+
+Bash:
+npm run dev
+
+🧪 Testing Suite
+We take reliability seriously. The project includes unit, integration, and E2E tests.
+
+Unit Tests: npm run test (Jest / Vitest)
+
+E2E Tests: npx playwright test
+
+UI Mode: npx playwright test --ui

@@ -4,7 +4,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useTaskOperations } from "../hooks/useTasksApi";
 import { useDebounce } from "../hooks/useDebounce";
 import { FilterPanel } from "../components/Modals/FilterPanel";
-import TaskColumn from "../components/UIComponents/TaskContainer";
+import TaskColumn from "../components/UIComponents/TaskColumn";
 import * as Ops from "../types/operations";
 
 const ProjectDetailsPage: React.FC = () => {

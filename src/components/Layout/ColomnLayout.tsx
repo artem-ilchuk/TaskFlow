@@ -21,7 +21,6 @@ const ColumnsContext = createContext({ columns: 1 });
 
 export const Columns: React.FC<ColumnsProps> = memo(
   ({ columns = 1, gap = "none", className, children, ...otherProps }) => {
-    // 1. Мемоизируем расчет классов для gap
     const gapClass = useMemo(() => {
       if (typeof gap === "string") {
         return designTokens.gapClasses[gap];
