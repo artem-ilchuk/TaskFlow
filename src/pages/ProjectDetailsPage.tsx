@@ -5,6 +5,7 @@ import { useTaskOperations } from "../hooks/useTasksApi";
 import { useDebounce } from "../hooks/useDebounce";
 import { FilterPanel } from "../components/Modals/FilterPanel";
 import TaskColumn from "../components/UIComponents/TaskColumn";
+import CreateTaskModule from "../components/Modals/CreateTaskModule";
 import * as Ops from "../types/operations";
 
 const ProjectDetailsPage: React.FC = () => {
@@ -57,12 +58,18 @@ const ProjectDetailsPage: React.FC = () => {
     <div className="flex flex-col gap-6">
       <FilterPanel filters={filters} setFilters={setFilters} />
 
-      <header className="flex justify-between items-center">
+      <header className="flex justify-between items-end bg-base-100 p-6 rounded-2xl border-2 border-base-300 shadow-sm">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Project Board</h1>
-          <p className="text-xs opacity-50 uppercase font-bold tracking-tighter mt-1">
-            Managing tasks for project ID: {projectId?.slice(-8)}
+          <h1 className="text-3xl font-black italic tracking-tighter uppercase text-primary">
+            Project_Board
+          </h1>
+          <p className="text-[10px] opacity-50 font-mono tracking-widest mt-1">
+            NODE_ID: {projectId?.toUpperCase()}
           </p>
+        </div>
+
+        <div className="flex items-center">
+          {projectId && <CreateTaskModule projectId={projectId} />}
         </div>
       </header>
 
@@ -72,9 +79,9 @@ const ProjectDetailsPage: React.FC = () => {
         </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scroll-px-6 custom-scrollbar">
+          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scroll-px-6 custom-scrollbar min-h-[60vh]">
             {Ops.KANBAN_COLUMNS.map((column) => (
-              <div key={column.id} className="snap-start">
+              <div key={column.id} className="snap-start min-w-[320px]">
                 <TaskColumn
                   column={column}
                   tasks={tasks.filter((t) => t.status === column.id)}
