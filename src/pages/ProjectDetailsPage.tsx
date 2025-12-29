@@ -19,18 +19,20 @@ const ProjectDetailsPage: React.FC = () => {
 
   const debouncedSearch = useDebounce(filters.search, 400);
 
-  const activeFilters = useMemo(
-    () => ({
-      ...filters,
-      search: debouncedSearch,
-    }),
-    [debouncedSearch, filters.priority, filters.status]
-  );
+  const { tasks, isLoading, updateTask } = useTaskOperations(projectId || "");
 
-  const { tasks, isLoading, updateTask } = useTaskOperations(
-    projectId || "",
-    activeFilters
-  );
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      const matchesSearch = task.title
+        .toLowerCase()
+        .includes(debouncedSearch.toLowerCase());
+
+      const matchesPriority =
+        filters.priority === "all" || task.priority === filters.priority;
+
+      return matchesSearch && matchesPriority;
+    });
+  }, [tasks, debouncedSearch, filters.priority]);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -84,7 +86,7 @@ const ProjectDetailsPage: React.FC = () => {
               <div key={column.id} className="snap-start min-w-[320px]">
                 <TaskColumn
                   column={column}
-                  tasks={tasks.filter((t) => t.status === column.id)}
+                  tasks={filteredTasks.filter((t) => t.status === column.id)}
                 />
               </div>
             ))}
