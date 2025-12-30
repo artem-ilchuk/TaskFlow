@@ -1,53 +1,54 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useTaskOperations } from "../hooks/useTasksApi";
-import { useDebounce } from "../hooks/useDebounce";
 import { FilterPanel } from "../components/Modals/FilterPanel";
 import TaskColumn from "../components/UIComponents/TaskColumn";
 import CreateTaskModule from "../components/Modals/CreateTaskModule";
 import * as Ops from "../types/operations";
+import { RootState } from "../redux/store";
+import {
+  selectTaskFilters,
+  selectFilteredTasks,
+} from "../redux/filters/selectors";
+import { setTaskFilters, resetTaskFilters } from "../redux/filters/slice";
 
 const ProjectDetailsPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
+  const dispatch = useDispatch();
 
-  const [filters, setFilters] = useState<Ops.ITaskFilters>({
-    search: "",
-    priority: "all",
-    status: "all",
-  });
-
-  const debouncedSearch = useDebounce(filters.search, 400);
-
+  const filters = useSelector(selectTaskFilters);
   const { tasks, isLoading, updateTask } = useTaskOperations(projectId || "");
 
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      const matchesSearch = task.title
-        .toLowerCase()
-        .includes(debouncedSearch.toLowerCase());
+  const filteredTasks = useSelector((state: RootState) =>
+    selectFilteredTasks(state, tasks)
+  );
 
-      const matchesPriority =
-        filters.priority === "all" || task.priority === filters.priority;
+  useEffect(() => {
+    return () => {
+      dispatch(resetTaskFilters());
+    };
+  }, [dispatch]);
 
-      return matchesSearch && matchesPriority;
-    });
-  }, [tasks, debouncedSearch, filters.priority]);
+  const handleSetFilters = useCallback(
+    (payload: Partial<Ops.ITaskFilters>) => {
+      dispatch(setTaskFilters(payload));
+    },
+    [dispatch]
+  );
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { destination, source, draggableId } = result;
-
       if (!destination) return;
       if (
         destination.droppableId === source.droppableId &&
         destination.index === source.index
-      ) {
+      )
         return;
-      }
 
       const newStatus = destination.droppableId as Ops.TaskStatus;
-
       updateTask({
         taskId: draggableId,
         data: { status: newStatus },
@@ -58,7 +59,7 @@ const ProjectDetailsPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <FilterPanel filters={filters} setFilters={setFilters} />
+      <FilterPanel filter={filters} setFilter={handleSetFilters} mode="tasks" />
 
       <header className="flex justify-between items-end bg-base-100 p-6 rounded-2xl border-2 border-base-300 shadow-sm">
         <div>
@@ -69,7 +70,6 @@ const ProjectDetailsPage: React.FC = () => {
             NODE_ID: {projectId?.toUpperCase()}
           </p>
         </div>
-
         <div className="flex items-center">
           {projectId && <CreateTaskModule projectId={projectId} />}
         </div>

@@ -11,8 +11,9 @@ import "./index.css";
 import "modern-normalize";
 import App from "./App";
 import { persistor, store } from "./redux/store";
-import { ThemeProvider } from "./context/themeContext";
-import { NotificationProvider } from "./context/notificationContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { PortalProvider } from "./context/PortalContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import ErrorBoundaryFallback from "./components/Common/ErrorBoundary";
 
 const queryClient = new QueryClient();
@@ -25,11 +26,13 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <QueryClientProvider client={queryClient}>
             <BrowserRouter>
               <Toaster position="top-right" />
-              <ThemeProvider>
-                <NotificationProvider>
-                  <App />
-                </NotificationProvider>
-              </ThemeProvider>
+              <PortalProvider>
+                <ThemeProvider>
+                  <NotificationProvider>
+                    <App />
+                  </NotificationProvider>
+                </ThemeProvider>
+              </PortalProvider>
               <ReactQueryDevtools initialIsOpen={false} />
             </BrowserRouter>
           </QueryClientProvider>

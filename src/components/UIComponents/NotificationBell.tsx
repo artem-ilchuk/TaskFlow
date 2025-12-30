@@ -1,5 +1,5 @@
 import React, { useCallback, memo } from "react";
-import { useNotifications } from "../../context/notificationContext";
+import { useNotifications } from "../../context/NotificationContext";
 import {
   BellIcon,
   BellSlashIcon,

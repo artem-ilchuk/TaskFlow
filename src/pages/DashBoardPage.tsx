@@ -1,4 +1,4 @@
-import { FC, memo, ReactNode, useState } from "react";
+import { FC, memo, ReactNode, useState, useCallback } from "react";
 import { VirtuosoGrid } from "react-virtuoso";
 import PadLayout from "../components/Layout/PadLayout";
 import CreateProjectModule from "../components/Modals/CreateProjectModule";
@@ -23,6 +23,13 @@ const DashBoardPage: FC = () => {
   const debouncedSearch = useDebounce(filters.search, 400);
   const { projects, isLoading } = useProjectOperations(debouncedSearch);
 
+  const handleSetFilter = useCallback((payload: Partial<Ops.ITaskFilters>) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+  }, []);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -30,7 +37,11 @@ const DashBoardPage: FC = () => {
   return (
     <PadLayout padding={["m", "m", "m", "s"]}>
       <div className="p-4 max-w-7xl mx-auto h-[calc(100vh-120px)] flex flex-col gap-6">
-        <FilterPanel filters={filters} setFilters={setFilters} />
+        <FilterPanel
+          filter={filters}
+          setFilter={handleSetFilter}
+          mode="projects"
+        />
 
         <header className="flex items-center justify-between shrink-0">
           <div>

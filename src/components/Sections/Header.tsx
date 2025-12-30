@@ -2,12 +2,13 @@ import React, { useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
-import { useTheme } from "../../context/themeContext";
+import { useTheme } from "../../context/ThemeContext";
 import InlineLayout from "../Layout/InlineLayout";
 import PadLayout from "../Layout/PadLayout";
 import Toggleswitch from "../Common/Toggleswitch";
 import Avatar from "../UIComponents/Avatar";
 import NotificationBell from "../UIComponents/NotificationBell";
+import { FilterInput } from "../Common/FilterInput";
 
 const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -74,10 +75,7 @@ const Header: React.FC = () => {
             </NavLink>
           </InlineLayout>
 
-          <div
-            id="header-filters-slot"
-            className="hidden lg:block flex-1 max-w-2xl mx-10"
-          ></div>
+          <FilterInput />
 
           <InlineLayout gap={{ sm: "l", lg: "xxl" }} align="center">
             <Toggleswitch theme={theme} toggleTheme={toggleTheme} />

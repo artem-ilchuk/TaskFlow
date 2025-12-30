@@ -3,19 +3,17 @@ import toast from "react-hot-toast";
 import { ApiRequest } from "../api/api";
 import * as Ops from "../types/operations";
 
-export const useTaskOperations = (
-  projectId: string,
-  filters?: Ops.ITaskFilters
-) => {
+export const useTaskOperations = (projectId: string) => {
   const queryClient = useQueryClient();
-  const tasksQueryKey = ["projects", projectId, "tasks", filters];
+
+  const tasksQueryKey = ["projects", projectId, "tasks"];
 
   const { data: tasks, isLoading } = useQuery({
     queryKey: tasksQueryKey,
     queryFn: ({ signal }) =>
-      ApiRequest.getTasksByProjectId(projectId, filters, signal),
+      ApiRequest.getTasksByProjectId(projectId, undefined, signal),
     enabled: !!projectId && projectId !== "undefined",
-    staleTime: 1000 * 30,
+    staleTime: 1000 * 60,
   });
 
   const { mutate: createTask, isPending: isCreating } = useMutation({
